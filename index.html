@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bevan:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="app.js"></script>
+    <title>wOrd sALaD</title>
+  </head>
+  <body>
+    <header>
+      <h1>w<span class="violet">O</span><span class="green">r</span>d <span class="blue">s</span>A<span class="violet">L</span><span class="yellow">a</span><span class="green">D</span></h1></h1>
+      <p>The New York Times Connections, Crossword, and Wordle games...all at the same time!</p>
+    </header>
+    
+    <p id="subheading">First, solve the puzzles on the blank cards to reveal the missing words...</p>
+    <div id="categories-container"></div>
+    <div id="cards-container"></div>
+
+    <div id="game-controls-container">
+      <div id="mistakes-container">
+        <p>Mistakes remaining:</p>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <input id="shuffle-btn" type="button" value="Toss">
+      <input id="deselect-btn" type="button" value="Deselect All">
+      <input id="submit-btn" type="button" value="Submit" disabled>
+    </div>
+
+    <div id="puzzle-modal" class="modal hide">
+      <button id="close-puzzle-btn" class="hide">X</button>
+      <h2 id="puzzle-title"></h2>
+      <p id="crossword-clue"></p>
+      <div id="puzzle-container"></div>
+      <div id="crossword-controls">
+        <div id="crossword-mistakes-container">
+        </div>
+        <input id="crossword-submit-btn" type="button" value="Submit" disabled>
+      </div>
+      
+      <div id="puzzle-message" class="hide"></div>
+    </div>
+  </body>
+
+<!-- TEMPLATES -->
+  <script id="wordle-row-template" type="text/x-handlebars">
+    <div class="row incomplete-row" id="row-{{@index}}">
+      <div class="tile" id="tile-{{@index}}-0"></div>
+      <div class="tile" id="tile-{{@index}}-1"></div>
+      <div class="tile" id="tile-{{@index}}-2"></div>  
+      <div class="tile" id="tile-{{@index}}-3"></div>
+      <div class="tile" id="tile-{{@index}}-4"></div>
+    </div>
+  </script>
+
+  <script id="wordle-template" type="text/x-handlebars">
+    <div id="wordle-result"></div>
+    {{#each rows}}
+    {{>wordleRowTemplate}}
+    {{/each}}
+  </script>
+
+  <script id="crossword-template" type="text/x-handlebars">
+    {{#each letters}}
+    <div class="cell" id="cell-{{@index}}"></div>
+    {{/each}}
+  </script>
+
+  <script id="card-template" type="text/x-handlebars">
+    {{#each cards}}
+      {{#unless puzzlePlayed}}
+      <div class="tooltip">
+      {{/unless}}
+        <div id="card-{{id}}" class="card {{#if wordle}}wordle{{/if}} {{#if crossword}}crossword{{/if}}" card-value="{{wordValue}}" name={{wordValue}}>
+          {{#if noPuzzle}}
+          {{wordValue}}
+          {{else}}
+          {{#each letters}}
+          <div class="blank {{#unless ../cardSolved}}reveal{{/unless}}">{{this}}</div>
+          {{/each}}
+          {{/if}}
+          {{#unless puzzlePlayed}}
+          <span class="tooltiptext">Solve this puzzle to reveal the word (TESTING: {{wordValue}})</span>
+          {{/unless}}
+        </div> 
+      {{#unless puzzlePlayed}}
+      </div>
+      {{/unless}}
+    {{/each}}
+  </script>
+
+  <script id="category-template" type="text/x-handlebars">
+    {{#each categories}}
+      <div class="category" id="category-{{difficulty}}">
+        <p class="category-name">{{name}}</p>
+        <p>{{words}}</p>
+    </div>
+    {{/each}}
+  </script>
+
+  <script id="mistakes-count-template" type="text/x-handlebars">
+    <p>Mistakes remaining:</p>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+  </script>
+</html>
