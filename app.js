@@ -72,6 +72,41 @@ class Card {
 }
 
 class Game {
+  constructor() {
+    this.data = GAME_DATA[0];
+    this.deck = this.createDeck();
+    this.registerTemplates();
+
+    // Connections game
+    this.subHeading = document.getElementById('subheading');
+    this.cardsContainer = document.getElementById('cards-container');
+    this.categoriesContainer = document.getElementById('categories-container');
+    this.gameControlsContainer = document.getElementById('game-controls-container');
+    this.mistakesContainer = document.getElementById('mistakes-container');
+    this.mistakesRemaining = 4;
+    this.puzzlesRemaining = 8;
+    this.selectedCards = [];
+    this.solvedCategories = [];
+
+    // Puzzles
+    this.currentCard;
+    this.guessedLetters = [];
+    this.crosswordMistakesRemaining = 4;
+    this.puzzleModal = document.getElementById('puzzle-modal');
+    this.puzzleTitle = document.getElementById('puzzle-title');
+    this.puzzleContainer = document.getElementById('puzzle-container');
+    this.puzzleMessage = document.getElementById('puzzle-message');
+    this.closePuzzleBtn = document.getElementById('close-puzzle-btn');
+    this.crosswordClue = document.getElementById('crossword-clue');
+    this.crosswordMistakesContainer = document.getElementById('crossword-mistakes-container');
+    this.crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
+  }
+
+  init() {
+    this.renderDeck();
+    this.bindEvents();
+  }
+
   // Create array of Card objects
   createDeck() {
     let deck = [];
@@ -274,7 +309,7 @@ class Game {
     });
 
     // Play wordle or crossword puzzle
-    document.addEventListener('keypress', event => {
+    document.addEventListener('keydown', event => {
       const playPuzzle = this.puzzleModal.classList.contains('wordle-puzzle') ? this.playWordle : this.playCrossword;
 
       playPuzzle.call(this, event.key, this.currentCard.winningLetters());
@@ -292,7 +327,7 @@ class Game {
     const row = document.querySelector('.incomplete-row');
     const isFirstTile = row.firstElementChild === activeTile;
     const rowComplete = this.guessedLetters.length === 5;
-    
+
     if (this.isLetter(input) && !rowComplete) {
       // Add letter to tile
       this.updateLetter(activeTile, input);
@@ -472,40 +507,7 @@ class Game {
     this.selectedCards = [];
   }
 
-  init() {
-    this.renderDeck();
-    this.bindEvents();
-  }
-
-  constructor() {
-    this.data = GAME_DATA[0];
-    this.deck = this.createDeck();
-    this.registerTemplates();
-
-    // Connections game
-    this.subHeading = document.getElementById('subheading');
-    this.cardsContainer = document.getElementById('cards-container');
-    this.categoriesContainer = document.getElementById('categories-container');
-    this.gameControlsContainer = document.getElementById('game-controls-container');
-    this.mistakesContainer = document.getElementById('mistakes-container');
-    this.mistakesRemaining = 4;
-    this.puzzlesRemaining = 8;
-    this.selectedCards = [];
-    this.solvedCategories = [];
-
-    // Puzzles
-    this.currentCard;
-    this.guessedLetters = [];
-    this.crosswordMistakesRemaining = 4;
-    this.puzzleModal = document.getElementById('puzzle-modal');
-    this.puzzleTitle = document.getElementById('puzzle-title');
-    this.puzzleContainer = document.getElementById('puzzle-container');
-    this.puzzleMessage = document.getElementById('puzzle-message');
-    this.closePuzzleBtn = document.getElementById('close-puzzle-btn');
-    this.crosswordClue = document.getElementById('crossword-clue');
-    this.crosswordMistakesContainer = document.getElementById('crossword-mistakes-container');
-    this.crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
-  }
+  
 }
 
 document.addEventListener('DOMContentLoaded', () => {
