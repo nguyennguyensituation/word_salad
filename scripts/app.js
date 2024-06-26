@@ -4,7 +4,7 @@ class Game {
     this.deck = this.createDeck();
     this.registerTemplates();
 
-    // Connections game
+    // Connections
     this.subHeading = document.getElementById('subheading');
     this.cardsContainer = document.getElementById('cards-container');
     this.categoriesContainer = document.getElementById('categories-container');
@@ -89,7 +89,7 @@ class Game {
     } else if (puzzle === 'crossword') {
       this.puzzleContainer.innerHTML = this.crosswordTemplate({ letters: this.currentCard.letters});
       this.crosswordMistakesContainer.innerHTML = this.mistakesCountTemplate({});
-      this.crosswordClue.innerHTML = this.currentCard.crosswordClue;
+      this.crosswordClue.innerHTML = this.currentCard.puzzle.crosswordClue;
     }
   }
 
@@ -117,6 +117,15 @@ class Game {
     this.crosswordTemplate = Handlebars.compile(document.getElementById('crossword-template').innerHTML);
     this.mistakesCountTemplate = Handlebars.compile(document.getElementById('mistakes-count-template').innerHTML);
     Handlebars.registerPartial('wordleRowTemplate', document.getElementById('wordle-row-template').innerHTML);
+    Handlebars.registerHelper('noPuzzle', function (puzzle) {
+      return puzzle.type === 'none';
+    });
+    Handlebars.registerHelper('isWordle', function (puzzle) {
+      return puzzle.type === 'wordle';
+    });
+    Handlebars.registerHelper('isCrossword', function (puzzle) {
+      return puzzle.type === 'crossword';
+    });
   }
 
   bounceAnimation(divs) {
@@ -152,7 +161,7 @@ class Game {
       const cardDiv = event.target.closest('div.card');
       const id = parseInt(cardDiv.id.replace("card-", ""));
       this.currentCard = this.getCardById(id);
-      const cardIsSelectable = this.currentCard.puzzlePlayed;
+      const cardIsSelectable = this.currentCard.puzzle.puzzlePlayed;
       
       if (cardIsSelectable) {
         if (this.selectedCards.length < 4 && !cardDiv.classList.contains('selected')) {
@@ -166,7 +175,7 @@ class Game {
         }
       } else { 
         // Show appropriate puzzle
-        const puzzleType = this.currentCard.wordle ? 'wordle' : 'crossword';
+        const puzzleType = this.currentCard.puzzle.type;
 
         this.puzzleModal.classList.add(`${puzzleType}-puzzle`);
         this.renderPuzzle(puzzleType);  
@@ -390,7 +399,7 @@ class Game {
   
 
   showPuzzleResult(isWinner = true) {
-    const puzzleType = this.currentCard.wordle ? 'wordle' : 'crossword';
+    const puzzleType = this.currentCard.puzzle.type;
     const message = isWinner ? `You solved this ${puzzleType} puzzle!` : `The correct word is ${this.currentCard.wordValue}.`;
 
     this.updateCardPuzzleResult(isWinner);
@@ -407,7 +416,7 @@ class Game {
   // Set Card values for board view
   updateCardPuzzleResult(isWinner) {
     this.currentCard.cardSolved = isWinner;
-    this.currentCard.puzzlePlayed = true;
+    this.currentCard.puzzle.puzzlePlayed = true;
     this.currentCard.letters = this.currentCard.winningLetters();
   }
 

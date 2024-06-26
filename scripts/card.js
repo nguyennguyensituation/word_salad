@@ -3,13 +3,9 @@ class Card {
     this.id = id;
     this.categoryName = categoryName;
     this.wordValue = wordData.wordValue;
-    this.noPuzzle = wordData.miniPuzzle === 'none';
-    this.wordle = wordData.miniPuzzle === 'wordle';
-    this.crossword = wordData.miniPuzzle === 'crossword';
-    this.crosswordClue = wordData.crosswordClue;
-    this.letters = this.noPuzzle ? null : this.blankSpaces() ;
-    this.cardSolved = this.noPuzzle;
-    this.puzzlePlayed = this.noPuzzle;
+    this.letters =  wordData.miniPuzzle === 'none' ? null : this.blankSpaces();
+    this.cardSolved = wordData.miniPuzzle === 'none';
+    this.puzzle = new Puzzle(wordData);
   }
 
   // Return string of empty spaces for puzzle default value
