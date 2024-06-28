@@ -145,7 +145,6 @@ class Game {
 
   selectCard(div) {
     const isSelectable = this.selectedCards.length < 4 && !div.classList.contains('selected');
-
     if (isSelectable) {
       div.classList.add('selected');
       this.selectedCards.push(this.currentCard);
@@ -182,7 +181,7 @@ class Game {
       const matchingCategory = this.allCategoriesMatch() ?? null;
       const selectedCardDivs = [...document.getElementsByClassName('selected')];
       
-      this.bounceAnimation(selectedCardDivs);
+      bounceAnimation(selectedCardDivs);
 
       setTimeout(() => {
         if (matchingCategory) {   
@@ -198,7 +197,7 @@ class Game {
             this.hideElement(this.gameControlsContainer);
           }
         } else {
-          this.shakeAnimation(selectedCardDivs);
+          shakeAnimation(selectedCardDivs);
 
           // Decrement mistakes counter
           const dot = this.mistakesContainer.querySelector('.dot');
