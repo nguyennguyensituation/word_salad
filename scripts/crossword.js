@@ -21,31 +21,40 @@ class Crossword extends Puzzle {
       this.updateLetter(activeCell); 
       crosswordSubmitBtn.disabled = true;
     } else if (move === 'checkRow') {
-      const isWinningGuess = this.isWinner();
-      const letterDivs = [...this.puzzleContainer.children];
-      
-      if (isWinningGuess) {
-        bounceAnimation(letterDivs);
-        this.styleResults(letterDivs);
-        this.showPuzzleResultMessage();
-        this.setPuzzleSolved();
-      } else {
-        shakeAnimation(letterDivs);
-        this.decrementCrosswordMistakes();
+      this.checkGuess();
+    }
+  }
 
-        if (this.crosswordMistakesRemaining === 0) { 
-          this.showPuzzleResultMessage(false);
-          this.setPuzzleSolved(false);
-        }  
-        crosswordSubmitBtn.disabled = true;
-      }
+  checkGuess() {
+    const isWinningGuess = this.isWinner();
+    const letterDivs = [...this.puzzleContainer.children];
+    const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
+
+    if (isWinningGuess) {
+      bounceAnimation(letterDivs);
+      this.styleResults(letterDivs);
+      this.showPuzzleResultMessage();
+      this.setPuzzleSolved();
+    } else {
+      shakeAnimation(letterDivs);
+      this.decrementCrosswordMistakes();
+
+      if (this.crosswordMistakesRemaining === 0) { 
+        this.showPuzzleResultMessage(false);
+        this.setPuzzleSolved(false);
+        console.log('end of xword puzz')
+      }  
+
+      crosswordSubmitBtn.disabled = true;
     }
   }
 
   getPrevious(activeCell) {
-    if (activeCell.id === 'cell-0' || activeCell.classList.contains('has-value')) { return activeCell } 
-      
-    return activeCell.previousElementSibling;
+    if (activeCell.id === 'cell-0' || activeCell.classList.contains('has-value')) { 
+      return activeCell 
+    } else {
+      return activeCell.previousElementSibling;
+    } 
   }
 
   isWinner() {

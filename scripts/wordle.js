@@ -13,23 +13,27 @@ class Wordle extends Puzzle {
     } else if (move === 'deleteLetter') {
       this.updateLetter(this.getPrevious(activeTile, row));
     } else if (move === 'checkRow') {
-      const results = this.checkGuess();
+      this.checkGuess(row);
+    }
+  }
 
-      this.styleResults(results, row);
-      this.guessedLetters = [];
+  checkGuess(row) {
+    const results = this.checkLetters();
 
-      // Show result if winning guess or last row
-      const isWinningGuess = this.isWinner(results);
-      const isLastRow = row.id === 'row-5';
+    this.styleResults(results, row);
+    this.guessedLetters = [];
 
-      if (isWinningGuess) { 
-        bounceAnimation([...row.children]);
-        this.showPuzzleResultMessage();     
-        this.setPuzzleSolved();
-      } else if (isLastRow) {
-        this.showPuzzleResultMessage(false);
-        this.setPuzzleSolved(false);
-      }
+    // Show result if winning guess or last row
+    const isWinningGuess = this.isWinner(results);
+    const isLastRow = row.id === 'row-5';
+
+    if (isWinningGuess) { 
+      bounceAnimation([...row.children]);
+      this.showPuzzleResultMessage();     
+      this.setPuzzleSolved();
+    } else if (isLastRow) {
+      this.showPuzzleResultMessage(false);
+      this.setPuzzleSolved(false);
     }
   }
 
@@ -47,7 +51,7 @@ class Wordle extends Puzzle {
   }
 
   // Return array of results for each guessed letter
-  checkGuess() {
+  checkLetters() {
     let winningLetters = [...this.letters];
     let results = this.guessedLetters.map((letter, idx) => {
       if (letter === winningLetters[idx]) {
