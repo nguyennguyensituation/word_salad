@@ -5,7 +5,18 @@ class Card {
     this.wordValue = wordData.wordValue;
     this.letters =  wordData.miniPuzzle === 'none' ? null : this.blankSpaces();
     this.cardSolved = wordData.miniPuzzle === 'none';
-    this.puzzle = new Puzzle(wordData);
+    // this.puzzle = new Puzzle(wordData);
+    this.puzzle = this.createPuzzleObject(wordData.miniPuzzle, wordData.wordValue, wordData.crosswordClue);
+  }
+
+  createPuzzleObject(type, word, crosswordClue) {
+    if (type === 'crossword') {
+      return new Crossword(word, crosswordClue);
+    } else if (type === 'wordle') {
+      return new Wordle(word);
+    }else {
+      return new Puzzle(type, word);
+    }
   }
 
   // Return string of empty spaces for puzzle default value
