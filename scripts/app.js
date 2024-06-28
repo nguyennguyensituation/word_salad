@@ -17,8 +17,6 @@ class Game {
 
     // Puzzles
     this.currentCard;
-    this.guessedLetters = [];
-    this.crosswordMistakesRemaining = 4;
     this.puzzleModal = document.getElementById('puzzle-modal');
     this.puzzleTitle = document.getElementById('puzzle-title');
     this.puzzleContainer = document.getElementById('puzzle-container');
@@ -82,15 +80,22 @@ class Game {
   }
 
   renderPuzzle(puzzle) {  
-    this.puzzleTitle.innerHTML = puzzle;
+    this.puzzleTitle.innerHTML = puzzle.type;
 
-    if (puzzle === 'wordle') {
+    if (puzzle.type === 'wordle') {
       this.puzzleContainer.innerHTML = this.wordleTemplate({ rows: [0, 1, 2, 3, 4, 5]});
-    } else if (puzzle === 'crossword') {
-      this.puzzleContainer.innerHTML = this.crosswordTemplate({ letters: this.currentCard.letters});
+    } else if (puzzle.type === 'crossword') {
+      this.puzzleContainer.innerHTML = this.crosswordTemplate({ letters: puzzle.letters});
+
       this.crosswordMistakesContainer.innerHTML = this.mistakesCountTemplate({});
-      this.crosswordClue.innerHTML = this.currentCard.puzzle.crosswordClue;
+      this.crosswordClue.innerHTML = puzzle.crosswordClue;
     }
+  }
+
+  // Show solved card
+  ShowCardValue(isWinner) {
+    this.currentCard.cardSolved = isWinner;
+    this.currentCard.letters = this.currentCard.winningLetters();
   }
 
   showAllCategories() {
@@ -128,21 +133,6 @@ class Game {
     });
   }
 
-  bounceAnimation(divs) {
-    let timer = 0;
-
-    divs.forEach(div => {
-      setTimeout(() => {
-        div.classList.add('bounce');
-      }, timer);
-
-      setTimeout(() => {
-        div.classList.remove('bounce');
-      }, timer + 1000);
-      timer += 100;
-    })
-  }
-
   shakeAnimation(divs) {
     divs.forEach(div => {
       div.classList.add('shake');
@@ -153,6 +143,18 @@ class Game {
     });
   }
 
+  selectCard(div) {
+    const isSelectable = this.selectedCards.length < 4 && !div.classList.contains('selected');
+
+    if (isSelectable) {
+      div.classList.add('selected');
+      this.selectedCards.push(this.currentCard);
+    } else {
+      div.classList.remove('selected');
+      this.selectedCards = this.selectedCards.filter(card => card !== this.currentCard);
+    }
+  }
+
   bindEvents() {
     const categorySubmitBtn = document.getElementById('submit-btn');
   
@@ -161,24 +163,13 @@ class Game {
       const cardDiv = event.target.closest('div.card');
       const id = parseInt(cardDiv.id.replace("card-", ""));
       this.currentCard = this.getCardById(id);
-      const cardIsSelectable = this.currentCard.puzzle.puzzlePlayed;
+      const currentMove = this.currentCard.puzzle.puzzlePlayed ? 'selectCard' : 'playPuzzle';
       
-      if (cardIsSelectable) {
-        if (this.selectedCards.length < 4 && !cardDiv.classList.contains('selected')) {
-          // Select/highlight currentCard and add to selectedCards array
-          cardDiv.classList.add('selected');
-          this.selectedCards.push(this.currentCard);
-        } else {
-          // Unselect/remove highlight from currentCard and remove from selectedCards array
-          cardDiv.classList.remove('selected');
-          this.selectedCards = this.selectedCards.filter(card => card !== this.currentCard);
-        }
-      } else { 
-        // Show appropriate puzzle
-        const puzzleType = this.currentCard.puzzle.type;
-
-        this.puzzleModal.classList.add(`${puzzleType}-puzzle`);
-        this.renderPuzzle(puzzleType);  
+      if (currentMove === 'selectCard') {
+        this.select(cardDiv);
+      } else if (currentMove === 'playPuzzle') { 
+        this.puzzleModal.classList.add(`${this.currentCard.puzzle.type}-puzzle`);
+        this.renderPuzzle(this.currentCard.puzzle);  
         this.showElement(this.puzzleModal);
       } 
 
@@ -246,9 +237,20 @@ class Game {
 
     // Play wordle or crossword puzzle
     document.addEventListener('keydown', event => {
-      const playPuzzle = this.puzzleModal.classList.contains('wordle-puzzle') ? this.playWordle : this.playCrossword;
+      const currentPuzzle = this.currentCard.puzzle;
+      const playPuzzle = currentPuzzle.type === 'wordle' ? currentPuzzle.playWordle : currentPuzzle.playCrossword;
 
-      playPuzzle.call(this, event.key, this.currentCard.winningLetters());
+      playPuzzle.call(currentPuzzle, event.key);
+      
+      if (currentPuzzle.puzzlePlayed) {
+        this.ShowCardValue(currentPuzzle.puzzleSolved);
+        this.puzzlesRemaining -= 1;
+        this.closePuzzleBtn.classList.remove('hide');
+      }
+
+      if (this.puzzlesRemaining === 0) {
+        this.subHeading.innerHTML = 'Now, create four groups of four!'
+      }
     });
 
     // Close puzzle modal
@@ -256,135 +258,6 @@ class Game {
       this.renderDeck();
       this.resetPuzzle(); 
     });
-  }
-
-  playWordle(input, winningLetters) {
-    let activeTile = document.querySelector('.tile:not(.has-value)');
-    const row = document.querySelector('.incomplete-row');
-    const isFirstTile = row.firstElementChild === activeTile;
-    const rowComplete = this.guessedLetters.length === 5;
-
-    if (this.isLetter(input) && !rowComplete) {
-      // Add letter to tile
-      this.updateLetter(activeTile, input);
-    } else if (input === 'Backspace') {
-      // If row has not been submitted, remove letter from last tile that contains a letter. Else, do nothing
-      if (rowComplete) {
-        activeTile = row.lastElementChild;
-      } else if (!isFirstTile) {
-        activeTile = activeTile.previousElementSibling;
-      }
-
-      this.updateLetter(activeTile)
-    } else if (input === 'Enter' && rowComplete) {
-      // Check if row is a winner and add styling to tiles
-      const results = this.checkWordleGuess(this.guessedLetters, winningLetters);
-      const tiles = row.children;
-
-      results.forEach((status, idx) => tiles[idx].classList.add(status));
-      row.classList.remove('incomplete-row');
-      this.guessedLetters = [];
-
-      // Check if puzzle is winner or we are on the last row
-      const isWinner = results.every(result => result === 'correct');
-      const isLastRow = row.id === 'row-5';
-
-      if (isWinner) { 
-        const letterDivs = [...row.children];
-
-        this.bounceAnimation(letterDivs);
-        this.showPuzzleResult();
-      } else if (isLastRow) {
-        this.showPuzzleResult(false);
-      }
-    }
-  }
-
-  // Return array of results for each guessed letter, accounting for duplicate letters
-  checkWordleGuess(guessedLetters, winningLetters) {
-    let winningLettersArr = [...winningLetters];
-    let results = guessedLetters.map((letter, idx) => {
-      if (letter === winningLettersArr[idx]) {
-        winningLettersArr[idx] = '';
-        return 'correct';
-      } else if (!winningLettersArr.includes(letter)) {
-        return 'incorrect-letter';
-      } else {
-        return 'incorrect-position';
-      }
-    });
-
-    // Check for duplicate letters
-    results.forEach((result, idx) => {
-      if (result === 'incorrect-position') {
-        if (winningLettersArr.includes(guessedLetters[idx])) {
-          const wordIdx = winningLettersArr.findIndex( letter => letter === guessedLetters[idx]);
-          winningLettersArr[wordIdx] = '';
-        } else {
-          results[idx] = 'incorrect-letter';
-        }
-      }
-    })
-
-    return results;
-  }
-
-  playCrossword(input) {
-    const winningWord = this.currentCard.wordValue.toLowerCase();
-    const firstEmptyCell = document.querySelector('.cell:not(.has-value, .solved-cell)');
-    const lastCell = this.puzzleContainer.lastElementChild;
-    let activeCell = firstEmptyCell ?? lastCell;
-    const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
-    const allCellsComplete = () => this.guessedLetters.length === winningWord.length;
-
-    if (this.isLetter(input) && !allCellsComplete()) {
-      // Add letter to cell
-      this.updateLetter(activeCell, input);
-      if (allCellsComplete()) { crosswordSubmitBtn.disabled = false; }
-    } else if (input === 'Backspace') {
-      // If cell is not first or is not empty, reassign active cell to the cell preceding it
-      // Remove letter from cell
-      activeCell = activeCell.id === 'cell-0' || activeCell.classList.contains('has-value') ? activeCell : activeCell.previousElementSibling;
-      this.updateLetter(activeCell); 
-      crosswordSubmitBtn.disabled = true;
-    } else if (input === 'Enter' && allCellsComplete()) {
-      // Check if winner
-      const isWinner = this.guessedLetters.join('') === winningWord;
-      const letterDivs = [...this.puzzleContainer.children];
-      
-      if (isWinner) {
-        this.bounceAnimation(letterDivs);
-        letterDivs.forEach(cell => cell.classList.add('solved-cell'))
-        this.showPuzzleResult() 
-      } else {
-        this.shakeAnimation(letterDivs);
-
-        // decrement mistakes counter
-        const dot = this.crosswordMistakesContainer.querySelector('.dot');
-        this.crosswordMistakesContainer.removeChild(dot);
-        this.crosswordMistakesRemaining -= 1;
-
-        if (this.crosswordMistakesRemaining === 0) { this.showPuzzleResult(false); } 
-      }  
-      crosswordSubmitBtn.disabled = true;
-    }
-  }
-
-  isLetter(input) {
-    return input.match(/[a-z]/i) && input.length === 1;
-  }
-
-  // Change letter value and add or remove from guessedLetters
-  updateLetter(letter, value = '') {
-    letter.innerHTML = value;
-
-    if (!value) {
-      letter.classList.remove('has-value');
-      this.guessedLetters.pop();
-    } else {
-      letter.classList.add('has-value');
-      this.guessedLetters.push(value);
-    }
   }
 
   // Return true if categoryNames for all cards are the same
@@ -396,42 +269,17 @@ class Game {
     }
   }
 
-  
-
-  showPuzzleResult(isWinner = true) {
-    const puzzleType = this.currentCard.puzzle.type;
-    const message = isWinner ? `You solved this ${puzzleType} puzzle!` : `The correct word is ${this.currentCard.wordValue}.`;
-
-    this.updateCardPuzzleResult(isWinner);
-    this.puzzleMessage.innerHTML = message;
-    this.showElement(this.puzzleMessage, this.closePuzzleBtn);
-    this.crosswordSubmitBtn.disabled = true;
-    this.puzzlesRemaining -= 1;
-
-    if (this.puzzlesRemaining === 0) {
-      this.subHeading.innerHTML = 'Now, create four groups of four!'
-    }
-  }
-
-  // Set Card values for board view
-  updateCardPuzzleResult(isWinner) {
-    this.currentCard.cardSolved = isWinner;
-    this.currentCard.puzzle.puzzlePlayed = true;
-    this.currentCard.letters = this.currentCard.winningLetters();
-  }
-
+  // TODO remove after refactoring handlebars puzzleTemplate
   resetPuzzle() {
-    const currentPuzzle = this.puzzleModal.classList.contains('wordle-puzzle') ? 'wordle' : 'crossword';
-    const puzzleContent = [this.puzzleMessage, this.crosswordClue, this.crosswordMistakesContainer]
-    const puzzleDivs = [this.puzzleMessage, this.closePuzzleBtn, this.puzzleModal]
-
     // Reset puzzle content
+    const puzzleContent = [this.puzzleMessage, this.crosswordClue, this.crosswordMistakesContainer]
+
     puzzleContent.forEach(element => element.innerHTML = '');
-    this.crosswordMistakesRemaining = 4;
-    this.guessedLetters = [];
 
     // Hide puzzle divs
-    this.puzzleModal.classList.remove(`${currentPuzzle}-puzzle`);
+    const puzzleDivs = [this.puzzleMessage, this.closePuzzleBtn, this.puzzleModal]
+
+    this.puzzleModal.classList.remove(`${this.currentCard.puzzle.type}-puzzle`);
     puzzleDivs.forEach(div => this.hideElement(div));
   }
 
@@ -442,8 +290,6 @@ class Game {
 
     this.selectedCards = [];
   }
-
-  
 }
 
 document.addEventListener('DOMContentLoaded', () => {
