@@ -7,6 +7,7 @@ class Card {
     this.cardSolved = wordData.miniPuzzle === 'none';
     // this.puzzle = new Puzzle(wordData);
     this.puzzle = this.createPuzzleObject(wordData.miniPuzzle, wordData.wordValue, wordData.crosswordClue);
+    this.selected = false;
   }
 
   createPuzzleObject(type, word, crosswordClue) {

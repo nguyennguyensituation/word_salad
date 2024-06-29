@@ -83,7 +83,7 @@
       {{#unless puzzle.puzzlePlayed}}
         <div class="tooltip">
       {{/unless}}
-      <div id="card-{{id}}" class="card {{#if (isWordle puzzle)}}wordle{{/if}} {{#if (isCrossword puzzle)}}crossword{{/if}} " card-value="{{wordValue}}" name={{wordValue}}>
+      <div id="card-{{id}}" class="card {{#if (isWordle puzzle)}}wordle{{/if}} {{#if (isCrossword puzzle)}}crossword{{/if}} {{#if selected}}selected{{/if}}" card-value="{{wordValue}}" name={{wordValue}}>
         {{#if (noPuzzle puzzle)}}
           {{wordValue}}
         {{else}}

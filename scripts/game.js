@@ -133,27 +133,6 @@ class Game {
     });
   }
 
-  shakeAnimation(divs) {
-    divs.forEach(div => {
-      div.classList.add('shake');
-
-      setTimeout(() => {
-        div.classList.remove('shake');
-      }, 500) 
-    });
-  }
-
-  selectCard(div) {
-    const isSelectable = this.selectedCards.length < 4 && !div.classList.contains('selected');
-    if (isSelectable) {
-      div.classList.add('selected');
-      this.selectedCards.push(this.currentCard);
-    } else {
-      div.classList.remove('selected');
-      this.selectedCards = this.selectedCards.filter(card => card !== this.currentCard);
-    }
-  }
-
   bindEvents() {
     const categorySubmitBtn = document.getElementById('submit-btn');
   
@@ -165,7 +144,7 @@ class Game {
       const currentMove = this.currentCard.puzzle.puzzlePlayed ? 'selectCard' : 'playPuzzle';
       
       if (currentMove === 'selectCard') {
-        this.selectCard(cardDiv);
+        this.selectCard(this.currentCard);
       } else if (currentMove === 'playPuzzle') { 
         this.puzzleModal.classList.add(`${this.currentCard.puzzle.type}-puzzle`);
         this.renderPuzzle(this.currentCard.puzzle);  
@@ -237,9 +216,6 @@ class Game {
     // Play wordle or crossword puzzle
     document.addEventListener('keydown', event => {
       const currentPuzzle = this.currentCard.puzzle;
-      // const playPuzzle = currentPuzzle.type === 'wordle' ? currentPuzzle.playWordle : currentPuzzle.playCrossword;
-
-      // playPuzzle.call(currentPuzzle, event.key);
 
       currentPuzzle.playPuzzle.call(currentPuzzle, event.key)
       
@@ -259,6 +235,26 @@ class Game {
       this.renderDeck();
       this.resetPuzzle(); 
     });
+  }
+
+  selectCard(card) {
+    const isSelectable = this.selectedCards.length < 4 && !card.selected;
+
+    if (isSelectable) {
+      card.selected = true;
+      this.selectedCards.push(card);
+    } else {
+      card.selected = false;
+      this.selectedCards = this.selectedCards.filter(selectedCard => selectedCard !== card);
+    }
+
+    this.renderDeck();
+  }
+
+  resetSelectedCards() {
+    this.selectedCards.forEach(card => card.selected = false);
+    this.selectedCards = [];
+    this.renderDeck();
   }
 
   // Return true if categoryNames for all cards are the same
@@ -282,13 +278,5 @@ class Game {
 
     this.puzzleModal.classList.remove(`${this.currentCard.puzzle.type}-puzzle`);
     puzzleDivs.forEach(div => this.hideElement(div));
-  }
-
-  resetSelectedCards() {
-    const selectedCardDivs = [...document.getElementsByClassName('selected')];
-
-    selectedCardDivs.forEach(card => card.classList.remove('selected'));
-
-    this.selectedCards = [];
   }
 }
