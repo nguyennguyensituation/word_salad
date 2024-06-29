@@ -48,6 +48,7 @@ h1, h2 {
   height: 80px;
   border-radius: 6px;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .category p:first-child {

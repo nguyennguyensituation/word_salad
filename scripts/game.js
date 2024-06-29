@@ -100,11 +100,19 @@ class Game {
 
   showAllCategories() {
     const categoryNames = this.getAllCategoryNames();
-      this.solvedCategories = categoryNames.map(name => this.getCategoryDetails(name));
-      this.deck = [];
+    let allCategories = categoryNames.map(name => this.getCategoryDetails(name));
+    allCategories = allCategories.forEach(category => {
+      const isUnsolved = this.solvedCategories.findIndex(solvedCat => solvedCat.name === category.name) === -1;
+      if (isUnsolved) {
+        this.solvedCategories.push(category);
+      }
+    });
 
-      this.renderSolvedCategories();
-      this.renderDeck();
+    // this.solvedCategories = categoryNames.map(name => this.getCategoryDetails(name));
+    this.deck = [];
+
+    this.renderSolvedCategories();
+    this.renderDeck();
   }
 
   showElement(...elements) {
