@@ -4,42 +4,42 @@ const GAME_DATA = [
     categories: [
       {
         difficulty: 1,
-        categoryName: "CORE",
+        categoryName: "core",
         categoryWords: [
-          { wordValue: 'CRUX', miniPuzzle: 'crossword', crosswordClue: "Gist"},
-          { wordValue: 'ESSENCE', miniPuzzle: 'none'},
-          { wordValue: 'HEART', miniPuzzle: 'wordle' },
-          { wordValue: 'SUBSTANCE', miniPuzzle: 'none'},
+          { wordValue: 'crux', miniPuzzle: 'crossword', crosswordClue: "Gist"},
+          { wordValue: 'essence', miniPuzzle: 'none'},
+          { wordValue: 'heart', miniPuzzle: 'wordle' },
+          { wordValue: 'substance', miniPuzzle: 'none'},
         ]
       },
       {
         difficulty: 2,
-        categoryName: "COMPLICATED",
+        categoryName: "complicated",
         categoryWords: [
-          { wordValue: 'BAROQUE', miniPuzzle: 'crossword', crosswordClue: "Music style popularized by Bach" },
-          { wordValue: 'COMPLEX', miniPuzzle: 'none'},
-          { wordValue: 'ELABORATE', miniPuzzle: 'none'},
-          { wordValue: 'MESSY', miniPuzzle: 'wordle'},
+          { wordValue: 'baroque', miniPuzzle: 'crossword', crosswordClue: "Music style popularized by Bach" },
+          { wordValue: 'complex', miniPuzzle: 'none'},
+          { wordValue: 'elaborate', miniPuzzle: 'none'},
+          { wordValue: 'messy', miniPuzzle: 'wordle'},
         ]
       },
       {
         difficulty: 3,
-        categoryName: "SYMBOLS USED IN MAKING LISTS",
+        categoryName: "symbols used in making lists",
         categoryWords: [
-          { wordValue: 'ARROW', miniPuzzle: 'wordle'},
-          { wordValue: 'BULLET', miniPuzzle: 'crossword', crosswordClue: "Muggsy Bogues or Manute Bol, once" },
-          { wordValue: 'CHECKBOX', miniPuzzle: 'none' },
-          { wordValue: 'HYPHEN', miniPuzzle: 'none' },
+          { wordValue: 'arrow', miniPuzzle: 'wordle'},
+          { wordValue: 'bullet', miniPuzzle: 'crossword', crosswordClue: "Muggsy Bogues or Manute Bol, once" },
+          { wordValue: 'checkbox', miniPuzzle: 'none' },
+          { wordValue: 'hyphen', miniPuzzle: 'none' },
         ]
       },
       {
         difficulty: 4,
-        categoryName: "WHAT 'CROSS' MIGHT MEAN",
+        categoryName: "what 'cross' might mean",
         categoryWords: [
-          { wordValue: 'ANGRY', miniPuzzle: 'wordle'},
-          { wordValue: 'BETRAY', miniPuzzle: 'none'},
-          { wordValue: 'CRUCIFIX', miniPuzzle: 'crossword', crosswordClue: "One of those 'T' necklaces, maybe" },
-          { wordValue: 'HYBRID', miniPuzzle: 'none'},
+          { wordValue: 'angry', miniPuzzle: 'wordle'},
+          { wordValue: 'betray', miniPuzzle: 'none'},
+          { wordValue: 'crucifix', miniPuzzle: 'crossword', crosswordClue: "One of those 'T' necklaces, maybe" },
+          { wordValue: 'hybrid', miniPuzzle: 'none'},
         ]
       },
     ]

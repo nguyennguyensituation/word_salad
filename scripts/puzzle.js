@@ -1,7 +1,7 @@
 class Puzzle {
   constructor(type, word) {
     this.type = type;
-    this.letters = word.toLowerCase().split('');
+    this.letters = word.split('');
     this.guessedLetters = [];
     this.puzzlePlayed = this.type === 'none';
     this.puzzleSolved = false;
