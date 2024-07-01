@@ -13,8 +13,18 @@ class Wordle extends Puzzle {
     } else if (move === 'deleteLetter') {
       this.updateLetter(this.getPrevious(activeTile, row));
     } else if (move === 'checkRow') {
-      this.checkGuess(row);
+      const word = this.guessedLetters.join('');
+
+      if (this.isValidGuess(word)) {
+        this.checkGuess(row);
+      } else {
+        shakeAnimation([...row.children]);
+      }
     }
+  }
+
+  isValidGuess(word) {
+    return VALID_WORDLE_WORDS.includes(word);
   }
 
   checkGuess(row) {
@@ -53,6 +63,7 @@ class Wordle extends Puzzle {
   // Return array of results for each guessed letter
   checkLetters() {
     let winningLetters = [...this.letters];
+
     let results = this.guessedLetters.map((letter, idx) => {
       if (letter === winningLetters[idx]) {
         winningLetters[idx] = '';
