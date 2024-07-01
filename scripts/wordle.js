@@ -41,7 +41,7 @@ class Wordle extends Puzzle {
   getPrevious(activeTile, row) {
     const isFirstTile = row.firstElementChild === activeTile;
 
-    if (this.rowIsComplete()) {
+    if (this.allSquaresFilled()) {
       return row.lastElementChild;
     } else if (!isFirstTile) {
       return activeTile.previousElementSibling;

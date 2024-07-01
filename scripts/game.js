@@ -98,9 +98,8 @@ class Game {
     let allCategories = categoryNames.map(name => this.getCategoryDetails(name));
     allCategories = allCategories.forEach(category => {
       const isUnsolved = this.solvedCategories.findIndex(solvedCat => solvedCat.name === category.name) === -1;
-      if (isUnsolved) {
-        this.solvedCategories.push(category);
-      }
+
+      if (isUnsolved) { this.solvedCategories.push(category) }
     });
 
     this.deck = [];

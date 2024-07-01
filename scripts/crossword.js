@@ -15,7 +15,7 @@ class Crossword extends Puzzle {
    
     if (move === 'addLetter') {
       this.updateLetter(activeCell, input);
-      if (this.rowIsComplete()) { crosswordSubmitBtn.disabled = false; }
+      if (this.allSquaresFilled()) { crosswordSubmitBtn.disabled = false; }
     } else if (move === 'deleteLetter') {
       activeCell = this.getPrevious(activeCell);
       this.updateLetter(activeCell); 
@@ -29,7 +29,6 @@ class Crossword extends Puzzle {
     const puzzleContainer = document.getElementById('puzzle-container');
     const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
     const isWinningGuess = this.isWinner();
-    // const letterDivs = [...this.puzzleContainer.children];
     const letterDivs = [...puzzleContainer.children];
 
     if (isWinningGuess) {
@@ -72,6 +71,7 @@ class Crossword extends Puzzle {
   decrementCrosswordMistakes() {
     const crosswordMistakesContainer = document.getElementById('crossword-mistakes-container');
     const dot = crosswordMistakesContainer.querySelector('.dot');
+    
     crosswordMistakesContainer.removeChild(dot);
     this.crosswordMistakesRemaining -= 1;
   }

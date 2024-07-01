@@ -8,18 +8,18 @@ class Puzzle {
   }
 
   getMove(input) {
-    const rowIsComplete = this.rowIsComplete();
+    const allSquaresFilled = this.allSquaresFilled();
 
-    if (this.isLetter(input) && !rowIsComplete) {
+    if (this.isLetter(input) && !allSquaresFilled) {
       return 'addLetter';
     } else if (input === 'Backspace') {
       return 'deleteLetter';
-    } else if (input === 'Enter' && rowIsComplete) {
+    } else if (input === 'Enter' && allSquaresFilled) {
       return 'checkRow';
     }
   }
 
-  rowIsComplete() {
+  allSquaresFilled() {
     return this.guessedLetters.length === this.letters.length;;
   }
 
