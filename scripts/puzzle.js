@@ -39,12 +39,16 @@ class Puzzle {
     }
   }
 
-  showPuzzleResultMessage(isWinner = true) {
+  showPuzzleMessage(message, flashMessage = false) {
     const puzzleMessage = document.getElementById('puzzle-message');
-    const message = isWinner ? `You solved this ${this.type} puzzle!` : `The correct word is ${this.letters.join('').toUpperCase()}.`;
-
     puzzleMessage.innerHTML = message;
     puzzleMessage.classList.remove('hide');
+
+    if (flashMessage) {
+      setTimeout(() => {
+        puzzleMessage.classList.add('hide');
+      }, 1200)
+    }
   }
 
   setPuzzleSolved(isSolved = true) {

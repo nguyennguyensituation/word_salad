@@ -19,6 +19,7 @@ class Wordle extends Puzzle {
         this.checkGuess(row);
       } else {
         shakeAnimation([...row.children]);
+        this.showPuzzleMessage("That word isn't in the word list.", true)
       }
     }
   }
@@ -39,10 +40,10 @@ class Wordle extends Puzzle {
 
     if (isWinningGuess) { 
       bounceAnimation([...row.children]);
-      this.showPuzzleResultMessage();     
+      this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
       this.setPuzzleSolved();
     } else if (isLastRow) {
-      this.showPuzzleResultMessage(false);
+      this.showPuzzleMessage(`The correct word is ${this.letters.join('').toUpperCase()}.`);
       this.setPuzzleSolved(false);
     }
   }

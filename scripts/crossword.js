@@ -34,14 +34,16 @@ class Crossword extends Puzzle {
     if (isWinningGuess) {
       bounceAnimation(letterDivs);
       this.styleResults(letterDivs);
-      this.showPuzzleResultMessage();
+      this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
+      this.disableSubmitBtn() 
       this.setPuzzleSolved();
     } else {
       shakeAnimation(letterDivs);
       this.decrementCrosswordMistakes();
 
       if (this.crosswordMistakesRemaining === 0) { 
-        this.showPuzzleResultMessage(false);
+        this.showPuzzleMessage(`The correct word is ${this.letters.join('').toUpperCase()}.`);
+        this.disableSubmitBtn() 
         this.setPuzzleSolved(false);
       }  
 
@@ -61,9 +63,7 @@ class Crossword extends Puzzle {
     return this.guessedLetters.join('') === this.letters.join('');
   }
 
-  showPuzzleResultMessage(isWinner = true) {
-    super.showPuzzleResultMessage(isWinner);
-
+  disableSubmitBtn() {
     const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
     crosswordSubmitBtn.disabled = true;
   }
