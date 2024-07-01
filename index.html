@@ -39,19 +39,7 @@
       <input id="submit-btn" type="button" value="Submit" disabled>
     </div>
 
-    <div id="puzzle-modal" class="modal hide">
-      <button id="close-puzzle-btn" class="hide">X</button>
-      <h2 id="puzzle-title"></h2>
-      <p id="crossword-clue"></p>
-      <div id="puzzle-container"></div>
-      <div id="crossword-controls">
-        <div id="crossword-mistakes-container">
-        </div>
-        <input id="crossword-submit-btn" type="button" value="Submit" disabled>
-      </div>
-      
-      <div id="puzzle-message" class="hide"></div>
-    </div>
+    <div id="puzzle-modal" class="modal hide"></div>
   </body>
 
 <!-- TEMPLATES -->
@@ -66,16 +54,36 @@
   </script>
 
   <script id="wordle-template" type="text/x-handlebars">
+    <button id="close-puzzle-btn" class="hide">X</button>
+      <h2 id="puzzle-title">Wordle</h2>
+      <div id="puzzle-container">
+        {{#each rows}}
+        {{>wordleRowTemplate}}
+        {{/each}}
+      </div>
+      <div id="puzzle-message" class="hide"></div>
     <div id="wordle-result"></div>
-    {{#each rows}}
-    {{>wordleRowTemplate}}
-    {{/each}}
   </script>
 
   <script id="crossword-template" type="text/x-handlebars">
-    {{#each letters}}
-    <div class="cell" id="cell-{{@index}}"></div>
-    {{/each}}
+    <button id="close-puzzle-btn" class="hide">X</button>
+      <h2 id="puzzle-title">Crossword</h2>
+      <p id="crossword-clue">{{crosswordClue}}</p>
+      <div id="puzzle-container">
+        {{#each letters}}
+        <div class="cell" id="cell-{{@index}}"></div>
+        {{/each}}
+      </div>
+      <div id="crossword-controls">
+        <div id="crossword-mistakes-container">
+          <p>Mistakes remaining:</p>
+          {{#each mistakesRemaining}}
+            <span class="dot"></span>
+          {{/each}}
+        </div>
+        <input id="crossword-submit-btn" type="button" value="Submit" disabled>
+      </div>
+      <div id="puzzle-message" class="hide"></div>
   </script>
 
   <script id="card-template" type="text/x-handlebars">
@@ -108,13 +116,5 @@
         <p>{{words}}</p>
     </div>
     {{/each}}
-  </script>
-
-  <script id="mistakes-count-template" type="text/x-handlebars">
-    <p>Mistakes remaining:</p>
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
   </script>
 </html>

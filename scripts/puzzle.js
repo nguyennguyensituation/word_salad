@@ -5,9 +5,6 @@ class Puzzle {
     this.guessedLetters = [];
     this.puzzlePlayed = this.type === 'none';
     this.puzzleSolved = false;
-    this.puzzleModal = document.getElementById('puzzle-modal');
-    this.puzzleContainer = document.getElementById('puzzle-container');
-    this.closePuzzleBtn = document.getElementById('close-puzzle-btn');
   }
 
   getMove(input) {

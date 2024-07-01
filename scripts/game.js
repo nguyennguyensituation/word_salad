@@ -2,32 +2,18 @@ class Game {
   constructor() {
     this.data = GAME_DATA[0];
     this.deck = this.createDeck();
-    this.registerTemplates();
-
-    // Connections
-    this.subHeading = document.getElementById('subheading');
-    this.cardsContainer = document.getElementById('cards-container');
-    this.categoriesContainer = document.getElementById('categories-container');
-    this.gameControlsContainer = document.getElementById('game-controls-container');
-    this.mistakesContainer = document.getElementById('mistakes-container');
-    this.mistakesRemaining = 4;
-    this.puzzlesRemaining = 8;
+    this.currentCard;
     this.selectedCards = [];
     this.solvedCategories = [];
-
-    // Puzzles
-    this.currentCard;
+    this.mistakesRemaining = 4;
+    this.puzzlesRemaining = 8;
+    this.subHeading = document.getElementById('subheading');
+    this.cardsContainer = document.getElementById('cards-container');
     this.puzzleModal = document.getElementById('puzzle-modal');
-    this.puzzleTitle = document.getElementById('puzzle-title');
-    this.puzzleContainer = document.getElementById('puzzle-container');
-    this.puzzleMessage = document.getElementById('puzzle-message');
-    this.closePuzzleBtn = document.getElementById('close-puzzle-btn');
-    this.crosswordClue = document.getElementById('crossword-clue');
-    this.crosswordMistakesContainer = document.getElementById('crossword-mistakes-container');
-    this.crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
   }
 
   init() {
+    this.registerTemplates();
     this.renderDeck();
     this.bindEvents();
   }
@@ -76,24 +62,33 @@ class Game {
   }
 
   renderSolvedCategories() {
-    this.categoriesContainer.innerHTML = this.categoryTemplate({categories: this.solvedCategories});
+    const categoriesContainer = document.getElementById('categories-container');
+
+    categoriesContainer.innerHTML = this.categoryTemplate({categories: this.solvedCategories});
   }
 
   renderPuzzle(puzzle) {  
-    this.puzzleTitle.innerHTML = puzzle.type;
-
     if (puzzle.type === 'wordle') {
-      this.puzzleContainer.innerHTML = this.wordleTemplate({ rows: [0, 1, 2, 3, 4, 5]});
+      this.puzzleModal.innerHTML = this.wordleTemplate({ rows: [0, 1, 2, 3, 4, 5]});
     } else if (puzzle.type === 'crossword') {
-      this.puzzleContainer.innerHTML = this.crosswordTemplate({ letters: puzzle.letters});
+      let mistakesArr = [];
 
-      this.crosswordMistakesContainer.innerHTML = this.mistakesCountTemplate({});
-      this.crosswordClue.innerHTML = puzzle.crosswordClue;
+      for (let i = 0; i < puzzle.crosswordMistakesRemaining; i += 1) {
+        mistakesArr.push(i);
+      }
+
+      const crosswordTemplateData = {
+        crosswordClue: puzzle.crosswordClue, 
+        letters: puzzle.letters, 
+        mistakesRemaining: mistakesArr
+      }
+
+      this.puzzleModal.innerHTML = this.crosswordTemplate(crosswordTemplateData);
     }
   }
 
   // Show solved card
-  ShowCardValue(isWinner) {
+  showCardValue(isWinner) {
     this.currentCard.cardSolved = isWinner;
     this.currentCard.letters = this.currentCard.winningLetters();
   }
@@ -108,9 +103,7 @@ class Game {
       }
     });
 
-    // this.solvedCategories = categoryNames.map(name => this.getCategoryDetails(name));
     this.deck = [];
-
     this.renderSolvedCategories();
     this.renderDeck();
   }
@@ -128,15 +121,14 @@ class Game {
     this.categoryTemplate = Handlebars.compile(document.getElementById('category-template').innerHTML);
     this.wordleTemplate = Handlebars.compile(document.getElementById('wordle-template').innerHTML);
     this.crosswordTemplate = Handlebars.compile(document.getElementById('crossword-template').innerHTML);
-    this.mistakesCountTemplate = Handlebars.compile(document.getElementById('mistakes-count-template').innerHTML);
     Handlebars.registerPartial('wordleRowTemplate', document.getElementById('wordle-row-template').innerHTML);
-    Handlebars.registerHelper('noPuzzle', function (puzzle) {
+    Handlebars.registerHelper('noPuzzle', (puzzle) => {
       return puzzle.type === 'none';
     });
-    Handlebars.registerHelper('isWordle', function (puzzle) {
+    Handlebars.registerHelper('isWordle', (puzzle) => {
       return puzzle.type === 'wordle';
     });
-    Handlebars.registerHelper('isCrossword', function (puzzle) {
+    Handlebars.registerHelper('isCrossword', (puzzle) => {
       return puzzle.type === 'crossword';
     });
   }
@@ -167,7 +159,8 @@ class Game {
     categorySubmitBtn.addEventListener('click', () => {
       const matchingCategory = this.allCategoriesMatch() ?? null;
       const selectedCardDivs = [...document.getElementsByClassName('selected')];
-      
+      const gameControlsContainer = document.getElementById('game-controls-container');
+
       bounceAnimation(selectedCardDivs);
 
       setTimeout(() => {
@@ -181,20 +174,20 @@ class Game {
 
           if(this.solvedCategories.length === 4) { 
             this.subHeading.innerHTML = "You found all the categories! Great job!";
-            this.hideElement(this.gameControlsContainer);
+            this.hideElement(gameControlsContainer);
           }
         } else {
           shakeAnimation(selectedCardDivs);
 
           // Decrement mistakes counter
-          const dot = this.mistakesContainer.querySelector('.dot');
-          this.mistakesContainer.removeChild(dot);
+          const mistakesContainer = document.getElementById('mistakes-container');  
+          const dot = mistakesContainer.querySelector('.dot');
+          mistakesContainer.removeChild(dot);
           this.mistakesRemaining -= 1;
               
           // Show all categories and losing message
           if (this.mistakesRemaining === 0) {
             setTimeout(() => {
-              const gameControlsContainer = document.getElementById('game-controls-container');
               gameControlsContainer.classList.add('hide');
               this.showAllCategories();
               this.subHeading.innerHTML = "Better luck next time!";
@@ -228,20 +221,20 @@ class Game {
       currentPuzzle.playPuzzle.call(currentPuzzle, event.key)
       
       if (currentPuzzle.puzzlePlayed) {
-        this.ShowCardValue(currentPuzzle.puzzleSolved);
+        this.closePuzzleBtn = document.getElementById('close-puzzle-btn');
+
+        this.showCardValue(currentPuzzle.puzzleSolved);
         this.puzzlesRemaining -= 1;
         this.closePuzzleBtn.classList.remove('hide');
+        this.closePuzzleBtn.addEventListener('click', () => {
+          this.renderDeck();
+          this.resetPuzzle(); 
+        });
       }
 
       if (this.puzzlesRemaining === 0) {
-        this.subHeading.innerHTML = 'Now, create four groups of four!'
+        this.subHeading.innerHTML = 'All the puzzles have been solved! Now, create four groups of four!'
       }
-    });
-
-    // Close puzzle modal
-    this.closePuzzleBtn.addEventListener('click', () => {
-      this.renderDeck();
-      this.resetPuzzle(); 
     });
   }
 
@@ -258,7 +251,7 @@ class Game {
 
     this.renderDeck();
   }
-
+  
   resetSelectedCards() {
     this.selectedCards.forEach(card => card.selected = false);
     this.selectedCards = [];
@@ -274,17 +267,8 @@ class Game {
     }
   }
 
-  // TODO remove after refactoring handlebars puzzleTemplate
   resetPuzzle() {
-    // Reset puzzle content
-    const puzzleContent = [this.puzzleMessage, this.crosswordClue, this.crosswordMistakesContainer]
-
-    puzzleContent.forEach(element => element.innerHTML = '');
-
-    // Hide puzzle divs
-    const puzzleDivs = [this.puzzleMessage, this.closePuzzleBtn, this.puzzleModal]
-
     this.puzzleModal.classList.remove(`${this.currentCard.puzzle.type}-puzzle`);
-    puzzleDivs.forEach(div => this.hideElement(div));
+    this.hideElement(this.puzzleModal);
   }
 }

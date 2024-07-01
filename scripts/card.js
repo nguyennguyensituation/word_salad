@@ -5,7 +5,6 @@ class Card {
     this.wordValue = wordData.wordValue;
     this.letters =  wordData.miniPuzzle === 'none' ? null : this.blankSpaces();
     this.cardSolved = wordData.miniPuzzle === 'none';
-    // this.puzzle = new Puzzle(wordData);
     this.puzzle = this.createPuzzleObject(wordData.miniPuzzle, wordData.wordValue, wordData.crosswordClue);
     this.selected = false;
   }
@@ -15,7 +14,7 @@ class Card {
       return new Crossword(word, crosswordClue);
     } else if (type === 'wordle') {
       return new Wordle(word);
-    }else {
+    } else {
       return new Puzzle(type, word);
     }
   }

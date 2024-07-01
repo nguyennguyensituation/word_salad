@@ -26,9 +26,11 @@ class Crossword extends Puzzle {
   }
 
   checkGuess() {
-    const isWinningGuess = this.isWinner();
-    const letterDivs = [...this.puzzleContainer.children];
+    const puzzleContainer = document.getElementById('puzzle-container');
     const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
+    const isWinningGuess = this.isWinner();
+    // const letterDivs = [...this.puzzleContainer.children];
+    const letterDivs = [...puzzleContainer.children];
 
     if (isWinningGuess) {
       bounceAnimation(letterDivs);
@@ -42,7 +44,6 @@ class Crossword extends Puzzle {
       if (this.crosswordMistakesRemaining === 0) { 
         this.showPuzzleResultMessage(false);
         this.setPuzzleSolved(false);
-        console.log('end of xword puzz')
       }  
 
       crosswordSubmitBtn.disabled = true;
@@ -69,8 +70,9 @@ class Crossword extends Puzzle {
   }
 
   decrementCrosswordMistakes() {
-    const dot = this.crosswordMistakesContainer.querySelector('.dot');
-    this.crosswordMistakesContainer.removeChild(dot);
+    const crosswordMistakesContainer = document.getElementById('crossword-mistakes-container');
+    const dot = crosswordMistakesContainer.querySelector('.dot');
+    crosswordMistakesContainer.removeChild(dot);
     this.crosswordMistakesRemaining -= 1;
   }
 
