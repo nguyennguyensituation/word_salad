@@ -21,7 +21,15 @@ class Crossword extends Puzzle {
       this.updateLetter(activeCell); 
       crosswordSubmitBtn.disabled = true;
     } else if (move === 'checkRow') {
-      this.checkGuess();
+      const word = this.guessedLetters.join('');
+
+      if (this.isUniqueGuess(word)) {
+        this.checkGuess();
+      } else {
+        const message = "You already guessed that word!";
+
+        this.showPuzzleMessage(message, true)
+      }
     }
   }
 
@@ -30,6 +38,8 @@ class Crossword extends Puzzle {
     const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
     const isWinningGuess = this.isWinner();
     const letterDivs = [...puzzleContainer.children];
+    const guessedWord = this.guessedLetters.join('');
+    this.guessedWords.push(guessedWord);
 
     if (isWinningGuess) {
       bounceAnimation(letterDivs);

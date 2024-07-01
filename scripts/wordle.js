@@ -15,21 +15,25 @@ class Wordle extends Puzzle {
     } else if (move === 'checkRow') {
       const word = this.guessedLetters.join('');
 
-      if (this.isValidGuess(word)) {
+      if (this.isValidWordleWord(word) && this.isUniqueGuess(word)) {
         this.checkGuess(row);
       } else {
+        const message = this.isUniqueGuess(word) ? "That word isn't in the word list." : "You already guessed that word!";
+
         shakeAnimation([...row.children]);
-        this.showPuzzleMessage("That word isn't in the word list.", true)
+        this.showPuzzleMessage(message, true)
       }
     }
   }
 
-  isValidGuess(word) {
+  isValidWordleWord(word) {
     return VALID_WORDLE_WORDS.includes(word);
   }
 
   checkGuess(row) {
     const results = this.checkLetters();
+    const guessedWord = this.guessedLetters.join('');
+    this.guessedWords.push(guessedWord);
 
     this.styleResults(results, row);
     this.guessedLetters = [];

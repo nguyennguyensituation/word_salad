@@ -5,6 +5,7 @@ class Puzzle {
     this.guessedLetters = [];
     this.puzzlePlayed = this.type === 'none';
     this.puzzleSolved = false;
+    this.guessedWords = [];
   }
 
   getMove(input) {
@@ -37,6 +38,10 @@ class Puzzle {
       letter.classList.add('has-value');
       this.guessedLetters.push(value);
     }
+  }
+
+  isUniqueGuess(word) {
+    return !this.guessedWords.includes(word);
   }
 
   showPuzzleMessage(message, flashMessage = false) {
