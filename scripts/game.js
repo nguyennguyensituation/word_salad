@@ -209,7 +209,6 @@ class Game {
 
     shuffleBtn.addEventListener('click', () => {
       this.deck = this.shuffleDeck(this.deck);
-      this.resetSelectedCards()
       this.renderDeck();
     });
 
