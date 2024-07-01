@@ -32,10 +32,9 @@ class Wordle extends Puzzle {
 
   checkGuess(row) {
     const results = this.checkLetters();
-    const guessedWord = this.guessedLetters.join('');
-    this.guessedWords.push(guessedWord);
 
     this.styleResults(results, row);
+    this.addWordToGuessedWordsArray();
     this.guessedLetters = [];
 
     // Show result if winning guess or last row

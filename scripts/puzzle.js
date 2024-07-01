@@ -40,6 +40,11 @@ class Puzzle {
     }
   }
 
+  addWordToGuessedWordsArray() {
+    const guessedWord = this.guessedLetters.join('');
+    this.guessedWords.push(guessedWord);
+  }
+
   isUniqueGuess(word) {
     return !this.guessedWords.includes(word);
   }
@@ -49,6 +54,7 @@ class Puzzle {
     puzzleMessage.innerHTML = message;
     puzzleMessage.classList.remove('hide');
 
+    // Hides puzzle message after 1.2 seconds
     if (flashMessage) {
       setTimeout(() => {
         puzzleMessage.classList.add('hide');

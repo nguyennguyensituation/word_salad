@@ -38,8 +38,8 @@ class Crossword extends Puzzle {
     const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
     const isWinningGuess = this.isWinner();
     const letterDivs = [...puzzleContainer.children];
-    const guessedWord = this.guessedLetters.join('');
-    this.guessedWords.push(guessedWord);
+    
+    this.addWordToGuessedWordsArray();
 
     if (isWinningGuess) {
       bounceAnimation(letterDivs);
