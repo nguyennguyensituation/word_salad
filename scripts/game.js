@@ -74,7 +74,9 @@ class Game {
 
   renderPuzzle(puzzle) {  
     if (puzzle.type === 'wordle') {
-      this.puzzleModal.innerHTML = this.wordleTemplate({ rows: [0, 1, 2, 3, 4, 5]});
+      const wordleData = { rows: [0, 1, 2, 3, 4, 5]}
+
+      this.puzzleModal.innerHTML = this.wordleTemplate(wordleData);
     } else if (puzzle.type === 'crossword') {
       let mistakesArr = [];
 
@@ -82,13 +84,13 @@ class Game {
         mistakesArr.push(i);
       }
 
-      const crosswordTemplateData = {
+      const crosswordData = {
         crosswordClue: puzzle.crosswordClue, 
         letters: puzzle.letters, 
         mistakesRemaining: mistakesArr
       }
 
-      this.puzzleModal.innerHTML = this.crosswordTemplate(crosswordTemplateData);
+      this.puzzleModal.innerHTML = this.crosswordTemplate(crosswordData);
     }
   }
 
@@ -112,12 +114,8 @@ class Game {
     this.renderDeck();
   }
 
-  showElement(...elements) {
-    elements.forEach(element => { element.classList.remove('hide'); })
-  }
-
-  hideElement(...elements) {
-    elements.forEach(element => { element.classList.add('hide'); })
+  toggleDisplay(element, mode = 'hide') {
+    mode === 'hide' ? element.classList.add('hide') : element.classList.remove('hide');
   }
 
   registerTemplates() { 
@@ -152,7 +150,7 @@ class Game {
       } else if (currentMove === 'playPuzzle') { 
         this.puzzleModal.classList.add(`${this.currentCard.puzzle.type}-puzzle`);
         this.renderPuzzle(this.currentCard.puzzle);  
-        this.showElement(this.puzzleModal);
+        this.toggleDisplay(this.puzzleModal, 'show');
       } 
 
       // Hide submit button if fewer than 4 cards selected
@@ -184,7 +182,8 @@ class Game {
   
             if(this.solvedCategories.length === 4) { 
               this.subHeading.innerHTML = "You found all the categories! Great job!";
-              this.hideElement(gameControlsContainer);
+              this.toggleElement
+              this.toggleDisplay(this.gameControlsContainer);
             }
           } else {
             shakeAnimation(selectedCardDivs);
@@ -299,6 +298,6 @@ class Game {
 
   resetPuzzle() {
     this.puzzleModal.classList.remove(`${this.currentCard.puzzle.type}-puzzle`);
-    this.hideElement(this.puzzleModal);
+    this.toggleDisplay(this.puzzleModal);
   }
 }
