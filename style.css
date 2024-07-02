@@ -268,14 +268,24 @@ input[type=button] {
   text-transform: capitalize;
 }
 
-#puzzle-message {
+.message {
   text-align: center;
   background-color: black;
   color: white;
   width: 200px;
-  padding: 20px;
-  margin: auto;
+  padding: 10px;
   border-radius: 6px;
+}
+
+#game-message {
+  top: 100px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: fixed;
+}
+
+#puzzle-message {
+  margin: auto;
   margin-top: 100px;
 }
 

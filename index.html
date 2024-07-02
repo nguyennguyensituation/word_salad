@@ -22,7 +22,8 @@
       <h1>w<span class="violet">O</span><span class="green">r</span>d <span class="blue">s</span>A<span class="violet">L</span><span class="yellow">a</span><span class="green">D</span></h1>
       <p>The New York Times Connections, Crossword, and Wordle games...all at the same time!</p>
     </header>
-    
+    <div id="game-message" class="message hide"></div>
+
     <p id="subheading">First, solve the puzzles on the blank cards to reveal the missing words...</p>
     <div id="categories-container"></div>
     <div id="cards-container"></div>
@@ -62,7 +63,7 @@
         {{>wordleRowTemplate}}
         {{/each}}
       </div>
-      <div id="puzzle-message" class="hide"></div>
+      <div id="puzzle-message" class="message hide"></div>
     <div id="wordle-result"></div>
   </script>
 
@@ -84,7 +85,7 @@
         </div>
         <input id="crossword-submit-btn" type="button" value="Submit" disabled>
       </div>
-      <div id="puzzle-message" class="hide"></div>
+      <div id="puzzle-message" class="message hide"></div>
   </script>
 
   <script id="card-template" type="text/x-handlebars">

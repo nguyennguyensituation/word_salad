@@ -4,6 +4,7 @@ class Game {
     this.deck = this.createDeck();
     this.currentCard;
     this.selectedCards = [];
+    this.guessedCards = [];
     this.solvedCategories = [];
     this.mistakesRemaining = 4;
     this.puzzlesRemaining = 8;
@@ -159,44 +160,51 @@ class Game {
       const matchingCategory = this.allCategoriesMatch() ?? null;
       const selectedCardDivs = [...document.getElementsByClassName('selected')];
       const gameControlsContainer = document.getElementById('game-controls-container');
+      const alreadyGuessed = this.alreadyGuessed(this.selectedCards);
 
-      bounceAnimation(selectedCardDivs);
 
-      setTimeout(() => {
-        if (matchingCategory) {   
-          // Show completed category and remove selectedCards from deck
-          this.solvedCategories.push(this.getCategoryDetails(matchingCategory));
-          this.deck = this.deck.filter(card => !this.selectedCards.includes(card));
-          this.resetSelectedCards();
-          this.renderSolvedCategories();
-          this.renderDeck();
-
-          if(this.solvedCategories.length === 4) { 
-            this.subHeading.innerHTML = "You found all the categories! Great job!";
-            this.hideElement(gameControlsContainer);
+      if (alreadyGuessed) {
+        shakeAnimation(selectedCardDivs);
+        this.showMessage("Already guessed!");
+      } else {
+        this.guessedCards.push(this.selectedCards);
+        bounceAnimation(selectedCardDivs);
+        setTimeout(() => {
+          if (matchingCategory) {   
+            // Show completed category and remove selectedCards from deck
+            this.solvedCategories.push(this.getCategoryDetails(matchingCategory));
+            this.deck = this.deck.filter(card => !this.selectedCards.includes(card));
+            this.resetSelectedCards();
+            this.renderSolvedCategories();
+            this.renderDeck();
+  
+            if(this.solvedCategories.length === 4) { 
+              this.subHeading.innerHTML = "You found all the categories! Great job!";
+              this.hideElement(gameControlsContainer);
+            }
+          } else {
+            shakeAnimation(selectedCardDivs);
+  
+            // Decrement mistakes counter
+            const mistakesContainer = document.getElementById('mistakes-container');  
+            const dot = mistakesContainer.querySelector('.dot');
+            mistakesContainer.removeChild(dot);
+            this.mistakesRemaining -= 1;
+                
+            // Show all categories and losing message
+            if (this.mistakesRemaining === 0) {
+              setTimeout(() => {
+                gameControlsContainer.classList.add('hide');
+                this.showAllCategories();
+                this.subHeading.innerHTML = "Better luck next time!";
+              }, 1000);
+            }
           }
-        } else {
-          shakeAnimation(selectedCardDivs);
-
-          // Decrement mistakes counter
-          const mistakesContainer = document.getElementById('mistakes-container');  
-          const dot = mistakesContainer.querySelector('.dot');
-          mistakesContainer.removeChild(dot);
-          this.mistakesRemaining -= 1;
-              
-          // Show all categories and losing message
-          if (this.mistakesRemaining === 0) {
-            setTimeout(() => {
-              gameControlsContainer.classList.add('hide');
-              this.showAllCategories();
-              this.subHeading.innerHTML = "Better luck next time!";
-            }, 1000);
-          }
-        }
-      }, 1500);
-
-      // Hide submit button
-      categorySubmitBtn.disabled = true;
+        }, 1500);
+  
+        // Hide submit button
+        categorySubmitBtn.disabled = true;
+      }
     });
 
     // Deselect all cards
@@ -236,6 +244,17 @@ class Game {
     });
   }
 
+  showMessage(message) {
+    const gameMessage = document.getElementById('game-message');
+    gameMessage.innerHTML = message;
+    gameMessage.classList.remove('hide');
+
+    // Hides message after 1.2 seconds
+    setTimeout(() => {
+      gameMessage.classList.add('hide');
+    }, 1200)
+  }
+
   selectCard(card) {
     const isSelectable = this.selectedCards.length < 4 && !card.selected;
 
@@ -249,7 +268,16 @@ class Game {
 
     this.renderDeck();
   }
-  
+
+  // Return true if all selected Cards match a set of previously selected Cards
+  allCardsMatch(selectedCards, previousSelection) {
+    return selectedCards.every(card => previousSelection.includes(card));
+  }
+
+  alreadyGuessed(selectedCards) {
+    return this.guessedCards.some(previousGuess => this.allCardsMatch(selectedCards, previousGuess));
+  }
+     
   resetSelectedCards() {
     this.selectedCards.forEach(card => card.selected = false);
     this.selectedCards = [];
