@@ -42,8 +42,12 @@ class Game {
     return this.deck.find(card => card.id === id);
   }
 
-  getAllCategoryNames() {
-    return this.data.categories.map(category => category.categoryName);
+  getUnsolvedCategoryNames() {
+    const allCategoryNames = this.data.categories.map(category => category.categoryName);
+
+    return allCategoryNames.filter(name => {
+      return this.solvedCategories.findIndex(solvedCat => solvedCat.name === name) === -1;
+    });
   }
 
   getCategoryDetails(name) {
@@ -95,13 +99,13 @@ class Game {
   }
 
   showAllCategories() {
-    const categoryNames = this.getAllCategoryNames();
-    let allCategories = categoryNames.map(name => this.getCategoryDetails(name));
-    allCategories = allCategories.forEach(category => {
-      const isUnsolved = this.solvedCategories.findIndex(solvedCat => solvedCat.name === category.name) === -1;
-
-      if (isUnsolved) { this.solvedCategories.push(category) }
-    });
+    const unsolvedCategories = this.getUnsolvedCategoryNames()
+    
+    unsolvedCategories.forEach(category => {
+      const categoryDetails = this.getCategoryDetails(category);
+      
+      this.solvedCategories.push(categoryDetails);
+    })
 
     this.deck = [];
     this.renderSolvedCategories();
