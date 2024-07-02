@@ -31,11 +31,25 @@ class Game {
       })
     })
 
-    return this.shuffleDeck(deck)
+    return this.shuffle(deck)
   }
 
-  shuffleDeck(deck) {
+  shuffle(deck) {
     return deck.sort(() => 0.5 - Math.random());
+  }
+
+  selectCard(card) {
+    const isSelectable = this.selectedCards.length < 4 && !card.selected;
+
+    if (isSelectable) {
+      card.selected = true;
+      this.selectedCards.push(card);
+    } else {
+      card.selected = false;
+      this.selectedCards = this.selectedCards.filter(selectedCard => selectedCard !== card);
+    }
+
+    this.renderDeck();
   }
 
   getCardById(id) {
@@ -62,14 +76,121 @@ class Game {
     }
   }
 
-  renderDeck() {
-    this.cardsContainer.innerHTML = this.cardTemplate({cards: this.deck});
+  isDuplicateGuess(selectedCards) {
+    return this.guessedCards.some(previousGuess => this.isDuplicateSelection(selectedCards, previousGuess));
   }
 
-  renderSolvedCategories() {
-    const categoriesContainer = document.getElementById('categories-container');
+  isDuplicateSelection(currentSelection, previousSelection) {
+    return currentSelection.every(card => previousSelection.includes(card));
+  }
 
-    categoriesContainer.innerHTML = this.categoryTemplate({categories: this.solvedCategories});
+  checkGuess(selectedCardDivs) {
+    const solvedCategory = this.getSolvedCategoryName() ?? null;
+    const gameControlsContainer = document.getElementById('game-controls-container');
+
+    this.guessedCards.push(this.selectedCards);
+    bounceAnimation(selectedCardDivs);
+
+    setTimeout(() => {
+      if (solvedCategory) {   
+        this.showCategory(solvedCategory);
+
+        if(this.solvedCategories.length === 4) { 
+          this.subHeading.innerHTML = "You found all the categories! Great job!";
+          this.toggleDisplay(gameControlsContainer);
+        }
+      } else {
+        shakeAnimation(selectedCardDivs);
+        this.decrementMistakesCounter();
+            
+        // Show all categories and losing message
+        if (this.mistakesRemaining === 0) {
+          setTimeout(() => {
+            this.toggleDisplay(gameControlsContainer);
+            this.showAllCategories();
+            this.subHeading.innerHTML = "Better luck next time!";
+          }, 1000);
+        }
+      }
+    }, 1500);
+
+    // Hide submit button
+    const categorySubmitBtn = document.getElementById('submit-btn');
+
+    categorySubmitBtn.disabled = true;
+  }
+
+   // Return categoryName if selected cards belong to the same category
+   getSolvedCategoryName() {
+    const firstCategory = this.selectedCards[0].categoryName;
+
+    if (this.selectedCards.every(card => card.categoryName === firstCategory)) {
+      return firstCategory;
+    }
+  }
+     
+  resetSelectedCards() {
+    this.selectedCards.forEach(card => card.selected = false);
+    this.selectedCards = [];
+    this.renderDeck();
+  }
+
+  decrementMistakesCounter() {
+    const mistakesContainer = document.getElementById('mistakes-container');  
+    const dot = mistakesContainer.querySelector('.dot');
+    mistakesContainer.removeChild(dot);
+    this.mistakesRemaining -= 1;
+  }
+
+  revealCardValue(isWinner) {
+    this.currentCard.cardSolved = isWinner;
+    this.currentCard.letters = this.currentCard.winningLetters();
+  }
+
+  showCategory(category) {
+    this.solvedCategories.push(this.getCategoryDetails(category));
+    this.deck = this.deck.filter(card => !this.selectedCards.includes(card));
+    this.resetSelectedCards();
+    this.renderCategories();
+    this.renderDeck();
+  }
+
+  showAllCategories() {
+    const unsolvedCategories = this.getUnsolvedCategoryNames()
+    
+    unsolvedCategories.forEach(category => {
+      const categoryDetails = this.getCategoryDetails(category);
+      
+      this.solvedCategories.push(categoryDetails);
+    })
+
+    this.deck = [];
+    this.renderCategories();
+    this.renderDeck();
+  }
+
+  showMessage(message) {
+    const gameMessage = document.getElementById('game-message');
+    gameMessage.innerHTML = message;
+    gameMessage.classList.remove('hide');
+
+    // Hides message after 1.2 seconds
+    setTimeout(() => {
+      gameMessage.classList.add('hide');
+    }, 1200)
+  }
+
+  toggleDisplay(element, mode = 'hide') {
+    mode === 'hide' ? element.classList.add('hide') : element.classList.remove('hide');
+  }
+
+  resetPuzzle() {
+    this.puzzleModal.classList.remove(`${this.currentCard.puzzle.type}-puzzle`);
+    this.toggleDisplay(this.puzzleModal);
+  }
+
+  renderDeck() {
+    this.cardsContainer.innerHTML = this.cardTemplate({cards: this.deck});
   }
 
   renderPuzzle(puzzle) {  
@@ -94,28 +215,10 @@ class Game {
     }
   }
 
-  // Show solved card
-  showCardValue(isWinner) {
-    this.currentCard.cardSolved = isWinner;
-    this.currentCard.letters = this.currentCard.winningLetters();
-  }
+  renderCategories() {
+    const categoriesContainer = document.getElementById('categories-container');
 
-  showAllCategories() {
-    const unsolvedCategories = this.getUnsolvedCategoryNames()
-    
-    unsolvedCategories.forEach(category => {
-      const categoryDetails = this.getCategoryDetails(category);
-      
-      this.solvedCategories.push(categoryDetails);
-    })
-
-    this.deck = [];
-    this.renderSolvedCategories();
-    this.renderDeck();
-  }
-
-  toggleDisplay(element, mode = 'hide') {
-    mode === 'hide' ? element.classList.add('hide') : element.classList.remove('hide');
+    categoriesContainer.innerHTML = this.categoryTemplate({categories: this.solvedCategories});
   }
 
   registerTemplates() { 
@@ -153,54 +256,14 @@ class Game {
 
     // Submit cards
     categorySubmitBtn.addEventListener('click', () => {
-      const matchingCategory = this.allCategoriesMatch() ?? null;
       const selectedCardDivs = [...document.getElementsByClassName('selected')];
-      const gameControlsContainer = document.getElementById('game-controls-container');
-      const alreadyGuessed = this.alreadyGuessed(this.selectedCards);
+      const isDuplicateGuess = this.isDuplicateGuess(this.selectedCards);
 
-
-      if (alreadyGuessed) {
+      if (isDuplicateGuess) {
         shakeAnimation(selectedCardDivs);
         this.showMessage("Already guessed!");
       } else {
-        this.guessedCards.push(this.selectedCards);
-        bounceAnimation(selectedCardDivs);
-        setTimeout(() => {
-          if (matchingCategory) {   
-            // Show completed category and remove selectedCards from deck
-            this.solvedCategories.push(this.getCategoryDetails(matchingCategory));
-            this.deck = this.deck.filter(card => !this.selectedCards.includes(card));
-            this.resetSelectedCards();
-            this.renderSolvedCategories();
-            this.renderDeck();
-  
-            if(this.solvedCategories.length === 4) { 
-              this.subHeading.innerHTML = "You found all the categories! Great job!";
-              this.toggleElement
-              this.toggleDisplay(this.gameControlsContainer);
-            }
-          } else {
-            shakeAnimation(selectedCardDivs);
-  
-            // Decrement mistakes counter
-            const mistakesContainer = document.getElementById('mistakes-container');  
-            const dot = mistakesContainer.querySelector('.dot');
-            mistakesContainer.removeChild(dot);
-            this.mistakesRemaining -= 1;
-                
-            // Show all categories and losing message
-            if (this.mistakesRemaining === 0) {
-              setTimeout(() => {
-                gameControlsContainer.classList.add('hide');
-                this.showAllCategories();
-                this.subHeading.innerHTML = "Better luck next time!";
-              }, 1000);
-            }
-          }
-        }, 1500);
-  
-        // Hide submit button
-        categorySubmitBtn.disabled = true;
+        this.checkGuess(selectedCardDivs);
       }
     });
 
@@ -213,7 +276,7 @@ class Game {
     const shuffleBtn = document.getElementById('shuffle-btn');
 
     shuffleBtn.addEventListener('click', () => {
-      this.deck = this.shuffleDeck(this.deck);
+      this.deck = this.shuffle(this.deck);
       this.renderDeck();
     });
 
@@ -226,7 +289,7 @@ class Game {
       if (currentPuzzle.puzzlePlayed) {
         this.closePuzzleBtn = document.getElementById('close-puzzle-btn');
 
-        this.showCardValue(currentPuzzle.puzzleSolved);
+        this.revealCardValue(currentPuzzle.puzzleSolved);
         this.puzzlesRemaining -= 1;
         this.closePuzzleBtn.classList.remove('hide');
         this.closePuzzleBtn.addEventListener('click', () => {
@@ -239,59 +302,5 @@ class Game {
         this.subHeading.innerHTML = 'All the puzzles have been solved! Now, create four groups of four!'
       }
     });
-  }
-
-  showMessage(message) {
-    const gameMessage = document.getElementById('game-message');
-    gameMessage.innerHTML = message;
-    gameMessage.classList.remove('hide');
-
-    // Hides message after 1.2 seconds
-    setTimeout(() => {
-      gameMessage.classList.add('hide');
-    }, 1200)
-  }
-
-  selectCard(card) {
-    const isSelectable = this.selectedCards.length < 4 && !card.selected;
-
-    if (isSelectable) {
-      card.selected = true;
-      this.selectedCards.push(card);
-    } else {
-      card.selected = false;
-      this.selectedCards = this.selectedCards.filter(selectedCard => selectedCard !== card);
-    }
-
-    this.renderDeck();
-  }
-
-  // Return true if all selected Cards match a set of previously selected Cards
-  allCardsMatch(selectedCards, previousSelection) {
-    return selectedCards.every(card => previousSelection.includes(card));
-  }
-
-  alreadyGuessed(selectedCards) {
-    return this.guessedCards.some(previousGuess => this.allCardsMatch(selectedCards, previousGuess));
-  }
-     
-  resetSelectedCards() {
-    this.selectedCards.forEach(card => card.selected = false);
-    this.selectedCards = [];
-    this.renderDeck();
-  }
-
-  // Return true if categoryNames for all cards are the same
-  allCategoriesMatch() {
-    const firstCategory = this.selectedCards[0].categoryName;
-
-    if (this.selectedCards.every(card => card.categoryName === firstCategory)) {
-      return firstCategory;
-    }
-  }
-
-  resetPuzzle() {
-    this.puzzleModal.classList.remove(`${this.currentCard.puzzle.type}-puzzle`);
-    this.toggleDisplay(this.puzzleModal);
   }
 }
