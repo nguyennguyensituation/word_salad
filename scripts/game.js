@@ -124,15 +124,9 @@ class Game {
     this.wordleTemplate = Handlebars.compile(document.getElementById('wordle-template').innerHTML);
     this.crosswordTemplate = Handlebars.compile(document.getElementById('crossword-template').innerHTML);
     Handlebars.registerPartial('wordleRowTemplate', document.getElementById('wordle-row-template').innerHTML);
-    Handlebars.registerHelper('noPuzzle', (puzzle) => {
-      return puzzle.type === 'none';
-    });
-    Handlebars.registerHelper('isWordle', (puzzle) => {
-      return puzzle.type === 'wordle';
-    });
-    Handlebars.registerHelper('isCrossword', (puzzle) => {
-      return puzzle.type === 'crossword';
-    });
+    Handlebars.registerHelper('noPuzzle', puzzle => puzzle.type === 'none');
+    Handlebars.registerHelper('isWordle', puzzle => puzzle.type === 'wordle');
+    Handlebars.registerHelper('isCrossword', puzzle => puzzle.type === 'crossword');
   }
 
   bindEvents() {
