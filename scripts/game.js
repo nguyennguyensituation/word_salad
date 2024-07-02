@@ -138,7 +138,7 @@ class Game {
   
     // Select and unselect card
     this.cardsContainer.addEventListener('click', event => {
-      const cardDiv = event.target.closest('div.card');
+      const cardDiv = event.target.closest('article.card');
       const id = parseInt(cardDiv.id.replace("card-", ""));
       this.currentCard = this.getCardById(id);
       const currentMove = this.currentCard.puzzle.puzzlePlayed ? 'selectCard' : 'playPuzzle';

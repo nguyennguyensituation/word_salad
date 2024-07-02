@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
+    <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bevan:ital@0;1&display=swap" rel="stylesheet">
@@ -19,104 +20,134 @@
   </head>
   <body>
     <header>
-      <h1>w<span class="violet">O</span><span class="green">r</span>d <span class="blue">s</span>A<span class="violet">L</span><span class="yellow">a</span><span class="green">D</span></h1>
+      <h1>w
+        <span class="violet">O</span>
+        <span class="green">r</span>d 
+        <span class="blue">s</span>A
+        <span class="violet">L</span>
+        <span class="yellow">a</span>
+        <span class="green">D</span>
+      </h1>
       <p>The New York Times Connections, Crossword, and Wordle games...all at the same time!</p>
+
+      <hr>
+
+      <section>
+        <div id="game-message" class="message hide"></div>
+        <p id="subheading">First, solve the puzzles on the blank cards to reveal the missing words...</p>
+      </section>
     </header>
-    <div id="game-message" class="message hide"></div>
 
-    <p id="subheading">First, solve the puzzles on the blank cards to reveal the missing words...</p>
-    <div id="categories-container"></div>
-    <div id="cards-container"></div>
+    <article id="categories-container"></article>
 
-    <div id="game-controls-container">
-      <div id="mistakes-container">
+    <article id="cards-container"></article>
+
+    <section id="game-controls-container">
+      <section id="mistakes-container">
         <p>Mistakes remaining:</p>
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
-      </div>
-      <input id="shuffle-btn" type="button" value="Shuffle">
-      <input id="deselect-btn" type="button" value="Deselect All">
-      <input id="submit-btn" type="button" value="Submit" disabled>
-    </div>
+      </section>
 
-    <div id="puzzle-modal" class="modal hide"></div>
+      <fieldset>
+        <input id="shuffle-btn" type="button" value="Shuffle">
+        <input id="deselect-btn" type="button" value="Deselect All">
+        <input id="submit-btn" type="button" value="Submit" disabled>
+      </fieldset>
+    </section>
+
+    <article id="puzzle-modal" class="modal hide"></article>
   </body>
+</html>
 
 <!-- TEMPLATES -->
-  <script id="wordle-row-template" type="text/x-handlebars">
-    <div class="row incomplete-row" id="row-{{@index}}">
-      <div class="tile" id="tile-{{@index}}-0"></div>
-      <div class="tile" id="tile-{{@index}}-1"></div>
-      <div class="tile" id="tile-{{@index}}-2"></div>  
-      <div class="tile" id="tile-{{@index}}-3"></div>
-      <div class="tile" id="tile-{{@index}}-4"></div>
-    </div>
-  </script>
+<script id="wordle-row-template" type="text/x-handlebars">
+  <div class="row incomplete-row" id="row-{{@index}}">
+    <div class="tile" id="tile-{{@index}}-0"></div>
+    <div class="tile" id="tile-{{@index}}-1"></div>
+    <div class="tile" id="tile-{{@index}}-2"></div>  
+    <div class="tile" id="tile-{{@index}}-3"></div>
+    <div class="tile" id="tile-{{@index}}-4"></div>
+  </div>
+</script>
 
-  <script id="wordle-template" type="text/x-handlebars">
-    <button id="close-puzzle-btn" class="hide">X</button>
-      <h2 id="puzzle-title">Wordle</h2>
-      <div id="puzzle-container">
-        {{#each rows}}
-        {{>wordleRowTemplate}}
-        {{/each}}
-      </div>
-      <div id="puzzle-message" class="message hide"></div>
+<script id="wordle-template" type="text/x-handlebars">
+  <button id="close-puzzle-btn" class="hide">X</button>
+  <h2 id="puzzle-title">Wordle</h2>
+
+  <section id="puzzle-container">
+    {{#each rows}}
+    {{>wordleRowTemplate}}
+    {{/each}}
+  </section>
+
+  <section>
+    <div id="puzzle-message" class="message hide"></div>
     <div id="wordle-result"></div>
-  </script>
+  </section>
+</script>
 
-  <script id="crossword-template" type="text/x-handlebars">
-    <button id="close-puzzle-btn" class="hide">X</button>
-      <h2 id="puzzle-title">Crossword</h2>
-      <p id="crossword-clue">{{crosswordClue}}</p>
-      <div id="puzzle-container">
-        {{#each letters}}
-        <div class="cell" id="cell-{{@index}}"></div>
-        {{/each}}
-      </div>
-      <div id="crossword-controls">
-        <div id="crossword-mistakes-container">
-          <p>Mistakes remaining:</p>
-          {{#each mistakesRemaining}}
-            <span class="dot"></span>
-          {{/each}}
-        </div>
-        <input id="crossword-submit-btn" type="button" value="Submit" disabled>
-      </div>
-      <div id="puzzle-message" class="message hide"></div>
-  </script>
+<script id="crossword-template" type="text/x-handlebars">
+  <button id="close-puzzle-btn" class="hide">X</button>
 
-  <script id="card-template" type="text/x-handlebars">
-    {{#each cards}}
-      {{#unless puzzle.puzzlePlayed}}
-        <div class="tooltip">
-      {{/unless}}
-      <div id="card-{{id}}" class="card {{#if (isWordle puzzle)}}wordle{{/if}} {{#if (isCrossword puzzle)}}crossword{{/if}} {{#if selected}}selected{{/if}}" card-value="{{wordValue}}" name={{wordValue}}>
-        {{#if (noPuzzle puzzle)}}
-          {{wordValue}}
-        {{else}}
-        {{#each letters}}
-          <div class="blank {{#unless ../cardSolved}}reveal{{/unless}}">{{this}}</div>
-        {{/each}}
-        {{/if}}
-        {{#unless puzzle.puzzlePlayed}}
-          <span class="tooltiptext">Solve this puzzle to reveal the word (TESTING: {{wordValue}})</span>
-        {{/unless}}
-      </div> 
-      {{#unless puzzle.puzzlePlayed}}
-      </div>
-      {{/unless}}
+  <header>
+    <h2 id="puzzle-title">Crossword</h2>
+    <p id="crossword-clue">{{crosswordClue}}</p>
+  </header>
+  
+  <section id="puzzle-container">
+    {{#each letters}}
+    <div class="cell" id="cell-{{@index}}"></div>
     {{/each}}
-  </script>
+  </section>
 
-  <script id="category-template" type="text/x-handlebars">
-    {{#each categories}}
-      <div class="category" id="category-{{difficulty}}">
-        <p class="category-name">{{name}}</p>
-        <p>{{words}}</p>
+  <fieldset id="crossword-controls">
+    <section id="crossword-mistakes-container">
+      <p>Mistakes remaining:</p>
+      {{#each mistakesRemaining}}
+        <span class="dot"></span>
+      {{/each}}
+    </section>
+    
+    <input id="crossword-submit-btn" type="button" value="Submit" disabled>
+  </fieldset>
+
+  <div id="puzzle-message" class="message hide"></div>
+</script>
+
+<script id="card-template" type="text/x-handlebars">
+  {{#each cards}}
+    {{#unless puzzle.puzzlePlayed}}
+    <div class="tooltip">
+    {{/unless}}
+
+    <article id="card-{{id}}" class="card {{#if (isWordle puzzle)}}wordle{{/if}} {{#if (isCrossword puzzle)}}crossword{{/if}} {{#if selected}}selected{{/if}}" card-value="{{wordValue}}" name={{wordValue}}>
+    {{#if (noPuzzle puzzle)}}
+      {{wordValue}}
+    {{else}}
+    {{#each letters}}
+      <div class="blank {{#unless ../cardSolved}}reveal{{/unless}}">{{this}}</div>
+    {{/each}}
+    {{/if}}
+    
+    {{#unless puzzle.puzzlePlayed}}
+      <span class="tooltiptext">Solve this puzzle to reveal the word (TESTING: {{wordValue}})</span>
+    {{/unless}}
+    </article> 
+
+    {{#unless puzzle.puzzlePlayed}}
     </div>
-    {{/each}}
-  </script>
-</html>
+    {{/unless}}
+  {{/each}}
+</script>
+
+<script id="category-template" type="text/x-handlebars">
+  {{#each categories}}
+  <div class="category" id="category-{{difficulty}}">
+    <p class="category-name">{{name}}</p>
+    <p>{{words}}</p>
+  </div>
+  {{/each}}
+</script>

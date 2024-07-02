@@ -5,11 +5,7 @@ body {
 
 header {
   border-bottom: solid 1px rgb(90, 89, 78);
-  padding-bottom: 20px;
-}
-
-#subheading {
-  padding: 20px;
+  margin-bottom: 20px;
 }
 
 header p {
@@ -197,6 +193,10 @@ h1, h2 {
 
 /* GAME CONTROLLER */
 
+fieldset {
+  border:none;
+}
+
 #mistakes-container {
   margin: auto;
   width: calc(3 * 8px + 4 * 150px);
@@ -253,6 +253,11 @@ input[type=button] {
   transform: translate(-50%, -50%);
 }
 
+.modal header {
+  border-bottom: none;
+  margin-bottom: 0px;
+}
+
 #close-puzzle-btn {
   background-color: white;
   border-radius: 6px;
@@ -278,7 +283,7 @@ input[type=button] {
 }
 
 #game-message {
-  top: 100px;
+  top: 125px;
   left: 50%;
   transform: translate(-50%, 0);
   position: fixed;
