@@ -2,9 +2,9 @@ class Puzzle {
   constructor(type, word) {
     this.type = type;
     this.letters = word.split('');
-    this.guessedLetters = [];
     this.puzzlePlayed = this.type === 'none';
     this.puzzleSolved = false;
+    this.guessedLetters = [];
     this.guessedWords = [];
   }
 
@@ -16,7 +16,7 @@ class Puzzle {
     } else if (input === 'Backspace') {
       return 'deleteLetter';
     } else if (input === 'Enter' && allSquaresFilled) {
-      return 'checkRow';
+      return 'checkGuess';
     }
   }
 
@@ -25,7 +25,7 @@ class Puzzle {
   }
 
   isLetter(input) {
-    return input.match(/[a-z]/i) && input.length === 1;
+    return input.length === 1 && input.match(/[a-z]/i);
   }
 
   updateLetter(letter, value = '') {
@@ -40,13 +40,16 @@ class Puzzle {
     }
   }
 
-  addWordToGuessedWordsArray() {
-    const guessedWord = this.guessedLetters.join('');
-    this.guessedWords.push(guessedWord);
-  }
-
   isUniqueGuess(word) {
     return !this.guessedWords.includes(word);
+  }
+
+  addToGuessedWords(word) {
+    this.guessedWords.push(word);
+  }
+
+  isWinner(word) {
+    return word === this.letters.join('');
   }
 
   showPuzzleMessage(message, flashMessage = false) {
@@ -54,12 +57,8 @@ class Puzzle {
     puzzleMessage.innerHTML = message;
     puzzleMessage.classList.remove('hide');
 
-    // Hides puzzle message after 1.2 seconds
-    if (flashMessage) {
-      setTimeout(() => {
-        puzzleMessage.classList.add('hide');
-      }, 1200)
-    }
+    // Hide message after 1.2 seconds
+    if (flashMessage) { setTimeout(() => puzzleMessage.classList.add('hide'), 1200) }
   }
 
   setPuzzleSolved(isSolved = true) {

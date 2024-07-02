@@ -6,13 +6,13 @@ class Wordle extends Puzzle {
   playPuzzle(input) {
     const move = this.getMove(input);
     const row = document.querySelector('.incomplete-row');
-    let activeTile = document.querySelector('.tile:not(.has-value)');
+    const activeSquare =  this.getActiveSquare(move);
 
     if (move === 'addLetter') {
-      this.updateLetter(activeTile, input);
+      this.updateLetter(activeSquare, input);
     } else if (move === 'deleteLetter') {
-      this.updateLetter(this.getPrevious(activeTile, row));
-    } else if (move === 'checkRow') {
+      this.updateLetter(activeSquare);
+    } else if (move === 'checkGuess') {
       const word = this.guessedLetters.join('');
 
       if (this.isValidWordleWord(word) && this.isUniqueGuess(word)) {
@@ -26,42 +26,32 @@ class Wordle extends Puzzle {
     }
   }
 
-  isValidWordleWord(word) {
-    return VALID_WORDLE_WORDS.includes(word);
-  }
+  getActiveSquare(move) {
+    let square = document.querySelector('.tile:not(.has-value)');
 
-  checkGuess(row) {
-    const results = this.checkLetters();
+    if (move === 'deleteLetter') {
+      const row = document.querySelector('.incomplete-row');
 
-    this.styleResults(results, row);
-    this.addWordToGuessedWordsArray();
-    this.guessedLetters = [];
-
-    // Show result if winning guess or last row
-    const isWinningGuess = this.isWinner(results);
-    const isLastRow = row.id === 'row-5';
-
-    if (isWinningGuess) { 
-      bounceAnimation([...row.children]);
-      this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
-      this.setPuzzleSolved();
-    } else if (isLastRow) {
-      this.showPuzzleMessage(`The correct word is ${this.letters.join('').toUpperCase()}.`);
-      this.setPuzzleSolved(false);
+      return this.getPrevious(square, row)
     }
+
+    return square;
   }
 
-  // Return the last wordle tile with a letter that hasn't been submitted yet
-  getPrevious(activeTile, row) {
-    const isFirstTile = row.firstElementChild === activeTile;
+  getPrevious(square, row) {
+    const isNotFirstSquare = row.firstElementChild !== square;
 
     if (this.allSquaresFilled()) {
       return row.lastElementChild;
-    } else if (!isFirstTile) {
-      return activeTile.previousElementSibling;
+    } else if (isNotFirstSquare) {
+      return square.previousElementSibling;
     } else {
-      return activeTile;
+      return square;
     }
+  }
+
+  isValidWordleWord(word) {
+    return VALID_WORDLE_WORDS.includes(word);
   }
 
   // Return array of results for each guessed letter
@@ -94,11 +84,29 @@ class Wordle extends Puzzle {
     return results;
   }
 
-  isWinner(results) {
-    return results.every(result => result === 'correct');
+  checkGuess(row) {
+    const results = this.checkLetters();
+    const word = this.guessedLetters.join('');
+
+    this.styleResults(results, row);
+    this.addToGuessedWords(word);
+    this.guessedLetters = [];
+
+    // Show result if winning guess or last row
+    const isWinningGuess = this.isWinner(word);
+    const isLastRow = row.id === 'row-5';
+
+    if (isWinningGuess) { 
+      bounceAnimation([...row.children]);
+      this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
+      this.setPuzzleSolved();
+    } else if (isLastRow) {
+      this.showPuzzleMessage(`The correct word is ${this.letters.join('').toUpperCase()}.`);
+      this.setPuzzleSolved(false);
+    }
   }
 
-  // Change tile color to green, yellow, or gray
+  // Change square background color
   styleResults(results, row) {
     const tiles = row.children;
 
