@@ -20,14 +20,7 @@
   </head>
   <body>
     <header>
-      <h1>w
-        <span class="violet">O</span>
-        <span class="green">r</span>d 
-        <span class="blue">s</span>A
-        <span class="violet">L</span>
-        <span class="yellow">a</span>
-        <span class="green">D</span>
-      </h1>
+      <h1>w<span class="violet">O</span><span class="green">r</span>d <span class="blue">s</span>A<span class="violet">L</span><span class="yellow">a</span><span class="green">D</span></h1>
       <p>The New York Times Connections, Crossword, and Wordle games...all at the same time!</p>
 
       <hr>
@@ -75,7 +68,7 @@
 
 <script id="wordle-template" type="text/x-handlebars">
   <button id="close-puzzle-btn" class="hide">X</button>
-  <h2 id="puzzle-title">Wordle</h2>
+  <h2 id="puzzle-title" class="green">Wordle</h2>
 
   <section id="puzzle-container">
     {{#each rows}}
@@ -93,7 +86,7 @@
   <button id="close-puzzle-btn" class="hide">X</button>
 
   <header>
-    <h2 id="puzzle-title">Crossword</h2>
+    <h2 id="puzzle-title" class="blue">Crossword</h2>
     <p id="crossword-clue">{{crosswordClue}}</p>
   </header>
   

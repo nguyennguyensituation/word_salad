@@ -117,8 +117,6 @@ h1, h2 {
   font-size: 12px;
   font-weight: 400;
   text-transform: none;
-  
-  /* Position the tooltip */
   position: absolute;
   z-index: 1;
   top: 10px;
@@ -138,7 +136,6 @@ h1, h2 {
   height: 18px;
   font-size: 0.8em;
   text-transform: uppercase;
-  /* color: tomato; */
 }
 
 .blank:first-of-type {
@@ -171,6 +168,7 @@ h1, h2 {
 .bounce {
   animation: bounce 1s ease 1;
 }
+
 @keyframes bounce {
     70% { transform:translateY(0%); }
     80% { transform:translateY(-15%); }
@@ -404,8 +402,6 @@ input[type=button] {
   color: tomato;
 }
 
-/* FOR REFERENCE ONLY - NOT IN USE */
-
 .violet {
   color: rgb(186, 129, 197);
 }
@@ -422,28 +418,25 @@ input[type=button] {
   color: #ffda00;
 }
 
-.reference-colors {
+/* FOR REFERENCE ONLY - NOT IN USE */
+/* .reference-colors {
   color: white;
   color: black;
   color: rgb(90, 89, 78);
   color: rgb(211, 214, 218);
 
-  /* crossword */
   color: #dcefff;
   color: #ffda00;
   color: #a7d8ff;
   color: rgb(40, 96, 216);
 
-  /* categories */
   color: rgb(249, 223, 109);
   color: rgb(160, 195, 90);
   color: rgb(176, 196, 239);
   color: rgb(186, 129, 197);
 
-  /* wordle */
   color: rgb(201, 180, 88);
   color: rgb(106, 170, 100);
   color: rgb(120, 124, 126);
-
-}
+} */
 
