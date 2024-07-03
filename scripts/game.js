@@ -1,6 +1,9 @@
 class Game {
   constructor() {
-    this.data = GAME_DATA[0];
+    this.playedGameIndexes = [];
+    this.data = this.getRandomGame();
+    console.log(`game id: ${this.data.id}`);
+    console.log(this.playedGameIndexes);
     this.deck = this.createDeck();
     this.currentCard;
     this.selectedCards = [];
@@ -17,6 +20,17 @@ class Game {
     this.registerTemplates();
     this.renderDeck();
     this.bindEvents();
+  }
+
+  getRandomGame() {
+    let idx = Math.floor(Math.random() * GAME_DATA.length);
+
+    if (!this.playedGameIndexes.includes(idx)) {
+      this.playedGameIndexes.push(idx);
+      return GAME_DATA[idx];
+    }
+
+    return this.getRandomGame();
   }
 
   // Create array of Card objects

@@ -96,7 +96,7 @@ const GAME_DATA = [
         difficulty: 1,
         categoryName: "highly skilled",
         categoryWords: [
-          { wordValue: 'ace', miniPuzzle: 'none', crosswordClue: "Part of a winning pair in blackjack"},
+          { wordValue: 'ace', miniPuzzle: 'crossword', crosswordClue: "Part of a winning pair in blackjack"},
           { wordValue: 'maestro', miniPuzzle: 'none'},
           { wordValue: 'adept', miniPuzzle: 'wordle' },
           { wordValue: 'hotshot', miniPuzzle: 'none'},
