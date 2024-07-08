@@ -294,25 +294,41 @@ class Game {
 
     // Play wordle or crossword puzzle
     document.addEventListener('keydown', event => {
-      const currentPuzzle = this.currentCard.puzzle;
+      const inPuzzleMode = !this.puzzleModal.classList.contains('hide');
 
-      currentPuzzle.playPuzzle.call(currentPuzzle, event.key)
-      
-      if (currentPuzzle.puzzlePlayed) {
-        const closePuzzleBtn = document.getElementById('close-puzzle-btn');
+      if (inPuzzleMode) {
+        const currentPuzzle = this.currentCard.puzzle;
 
-        this.revealCardValue(currentPuzzle.puzzleSolved);
-        this.puzzlesRemaining -= 1;
-        this.toggleDisplay(closePuzzleBtn, 'show');
-        closePuzzleBtn.addEventListener('click', () => {
-          this.renderDeck();
-          this.resetPuzzle(); 
-        });
-      }
+        currentPuzzle.playPuzzle.call(currentPuzzle, event.key)
+        
+        if (currentPuzzle.puzzlePlayed) {
+          const closePuzzleBtn = document.getElementById('close-puzzle-btn');
 
-      if (this.puzzlesRemaining === 0) {
-        this.subHeading.innerHTML = 'All the puzzles have been solved! Now, create four groups of four!'
+          this.revealCardValue(currentPuzzle.puzzleSolved);
+          this.puzzlesRemaining -= 1;
+          this.toggleDisplay(closePuzzleBtn, 'show');
+
+          closePuzzleBtn.addEventListener('click', () => {
+            this.renderDeck();
+            this.resetPuzzle(); 
+          });
+        }
+
+        if (this.puzzlesRemaining === 0) {
+          this.subHeading.innerHTML = 'All the puzzles have been solved! Now, create four groups of four!'
+        }
       }
     });
+
+    // Submit crossword answer
+    this.puzzleModal.addEventListener('click', event => {
+      const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
+
+      if (event.target === crosswordSubmitBtn) {
+        const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
+        
+        document.dispatchEvent(enterEvent);
+      }
+    })
   }
 }
