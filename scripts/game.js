@@ -11,12 +11,16 @@ class Game {
     this.puzzlesRemaining = 8;
     this.subHeading = document.getElementById('subheading');
     this.cardsContainer = document.getElementById('cards-container');
+    this.mistakesContainer = document.getElementById('mistakes-container');
+    this.gameControlsContainer = document.getElementById('game-controls-container');
     this.puzzleModal = document.getElementById('puzzle-modal');
+    this.resetGameBtn = document.getElementById('reset-game-btn');
   }
 
   init() {
     this.registerTemplates();
     this.renderDeck();
+    this.renderRemainingMistakes();
     this.bindEvents();
   }
 
@@ -98,7 +102,6 @@ class Game {
 
   checkGuess(selectedCardDivs) {
     const solvedCategory = this.getSolvedCategoryName() ?? null;
-    const gameControlsContainer = document.getElementById('game-controls-container');
 
     this.guessedCards.push(this.selectedCards);
     bounceAnimation(selectedCardDivs);
@@ -109,18 +112,19 @@ class Game {
 
         if(this.solvedCategories.length === 4) { 
           this.subHeading.innerHTML = "You found all the categories! Great job!";
-          this.toggleDisplay(gameControlsContainer);
+          this.toggleDisplay(this.gameControlsContainer);
+          this.toggleDisplay(this.resetGameBtn, 'show');
         }
       } else {
         shakeAnimation(selectedCardDivs);
         this.decrementMistakesCounter();
             
-        // Show all categories and losing message
         if (this.mistakesRemaining === 0) {
           setTimeout(() => {
-            this.toggleDisplay(gameControlsContainer);
+            this.toggleDisplay(this.gameControlsContainer);
             this.showAllCategories();
             this.subHeading.innerHTML = "Better luck next time!";
+            this.toggleDisplay(this.resetGameBtn, 'show');
           }, 1000);
         }
       }
@@ -148,9 +152,8 @@ class Game {
   }
 
   decrementMistakesCounter() {
-    const mistakesContainer = document.getElementById('mistakes-container');  
-    const dot = mistakesContainer.querySelector('.dot');
-    mistakesContainer.removeChild(dot);
+    const dot = this.mistakesContainer.querySelector('.dot');
+    this.mistakesContainer.removeChild(dot);
     this.mistakesRemaining -= 1;
   }
 
@@ -201,8 +204,33 @@ class Game {
     this.toggleDisplay(this.puzzleModal);
   }
 
+  resetConnections() {
+    this.data = this.getRandomGame();
+    this.deck = this.createDeck();
+    this.currentCard;
+    this.selectedCards = [];
+    this.guessedCards = [];
+    this.solvedCategories = [];
+    this.mistakesRemaining = 4;
+    this.puzzlesRemaining = 8;
+  }
+
+  resetGame() {
+    this.resetConnections();
+    this.renderCategories();
+    this.renderDeck();
+    this.renderRemainingMistakes();
+    this.toggleDisplay(this.resetGameBtn);
+    this.toggleDisplay(this.gameControlsContainer, 'show');
+    this.subHeading.innerHTML = "First, solve the puzzles on the blank cards to reveal the missing words..."
+  }
+
   renderDeck() {
     this.cardsContainer.innerHTML = this.cardTemplate({cards: this.deck});
+  }
+
+  renderRemainingMistakes() {
+    this.mistakesContainer.innerHTML = this.mistakesTemplate({ mistakesRemaining: [0, 1, 2, 3] })
   }
 
   renderPuzzle(puzzle) {  
@@ -236,6 +264,7 @@ class Game {
   registerTemplates() { 
     this.cardTemplate = Handlebars.compile(document.getElementById("card-template").innerHTML);
     this.categoryTemplate = Handlebars.compile(document.getElementById('category-template').innerHTML);
+    this.mistakesTemplate = Handlebars.compile(document.getElementById('mistakes-dot-template').innerHTML);
     this.wordleTemplate = Handlebars.compile(document.getElementById('wordle-template').innerHTML);
     this.crosswordTemplate = Handlebars.compile(document.getElementById('crossword-template').innerHTML);
     Handlebars.registerPartial('wordleRowTemplate', document.getElementById('wordle-row-template').innerHTML);
@@ -292,6 +321,11 @@ class Game {
       this.renderDeck();
     });
 
+    // Play new game
+    this.resetGameBtn.addEventListener('click', () => {
+      this.resetGame();
+    })
+
     // Play wordle or crossword puzzle
     document.addEventListener('keydown', event => {
       const inPuzzleMode = !this.puzzleModal.classList.contains('hide');
@@ -322,12 +356,10 @@ class Game {
 
     // Submit crossword answer
     this.puzzleModal.addEventListener('click', event => {
-      const crosswordSubmitBtn = document.getElementById('crossword-submit-btn');
+      const submitCrosswordGuess = event.target === document.getElementById('crossword-submit-btn');
 
-      if (event.target === crosswordSubmitBtn) {
-        const enterEvent = new KeyboardEvent("keydown", { key: "Enter" });
-        
-        document.dispatchEvent(enterEvent);
+      if (submitCrosswordGuess) {
+        document.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
       }
     })
   }
