@@ -2,8 +2,6 @@ class Game {
   constructor() {
     this.playedGameIndexes = [];
     this.data = this.getRandomGame();
-    console.log(`game id: ${this.data.id}`);
-    console.log(this.playedGameIndexes);
     this.deck = this.createDeck();
     this.currentCard;
     this.selectedCards = [];
@@ -186,11 +184,11 @@ class Game {
   showMessage(message) {
     const gameMessage = document.getElementById('game-message');
     gameMessage.innerHTML = message;
-    gameMessage.classList.remove('hide');
+    this.toggleDisplay(gameMessage, 'show');
 
     // Hides message after 1.2 seconds
     setTimeout(() => {
-      gameMessage.classList.add('hide');
+      this.toggleDisplay(gameMessage);
     }, 1200)
   }
 
@@ -301,12 +299,12 @@ class Game {
       currentPuzzle.playPuzzle.call(currentPuzzle, event.key)
       
       if (currentPuzzle.puzzlePlayed) {
-        this.closePuzzleBtn = document.getElementById('close-puzzle-btn');
+        const closePuzzleBtn = document.getElementById('close-puzzle-btn');
 
         this.revealCardValue(currentPuzzle.puzzleSolved);
         this.puzzlesRemaining -= 1;
-        this.closePuzzleBtn.classList.remove('hide');
-        this.closePuzzleBtn.addEventListener('click', () => {
+        this.toggleDisplay(closePuzzleBtn, 'show');
+        closePuzzleBtn.addEventListener('click', () => {
           this.renderDeck();
           this.resetPuzzle(); 
         });
