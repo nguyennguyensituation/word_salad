@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const myGame = new Game;
-  myGame.init();
+  const mySession = new Session;
+  mySession.init();
 })
 

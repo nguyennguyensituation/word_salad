@@ -206,7 +206,7 @@ input[type=button]:not([disabled]):hover {
   color: white;
 }
 
-#reset-game-btn {
+#play-again-btn {
   position: fixed;
   left: 50%;
   transform: translate(-50%);
