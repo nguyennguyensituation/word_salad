@@ -49,7 +49,7 @@
 
     <input id="reset-game-btn" type="button" value="Play again" class="hide">
 
-    <article id="puzzle-modal" class="modal hide"></article>
+    <article id="puzzle-modal" class="hide"></article>
   </body>
 </html>
 
@@ -143,7 +143,7 @@
 
 <script id="category-template" type="text/x-handlebars">
   {{#each categories}}
-  <div class="category" id="category-{{difficulty}}">
+  <div class="category" id="difficulty-{{difficulty}}">
     <p class="category-name">{{name}}</p>
     <p>{{words}}</p>
   </div>

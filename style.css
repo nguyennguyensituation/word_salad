@@ -20,59 +20,44 @@ h1, h2 {
   position: relative;
 }
 
-.hide {
-  display: none;
+.violet {
+  color: rgb(186, 129, 197);
+}
+
+.green {
+  color: rgb(106, 170, 100);
+}
+
+.blue {
+  color: #a7d8ff;
+}
+
+.yellow {
+  color: #ffda00;
 }
 
 #subheading {
   text-align: center;
 }
 
-/* CATEGORIES */
-
-#categories-container {
-  display: grid;
-  grid-template-columns: auto;
-  gap: 8px;
-  width: calc(3 * 8px + 4 * 150px);
-  margin: auto;
-  border: none;
-  margin-bottom: 8px;
-}
-
-.category {
-  height: 80px;
-  border-radius: 6px;
+.message {
   text-align: center;
-  text-transform: uppercase;
+  background-color: black;
+  color: white;
+  width: 200px;
+  padding: 10px;
+  border-radius: 6px;
 }
 
-.category p:first-child {
-  padding-top: 5px;
-}
-.category p {
-  font-size: 20px;
-  line-height: 6px;
-}
-
-.category-name {
-  font-weight: 700;
+#game-message {
+  top: 125px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  position: fixed;
 }
 
-#category-1 {
-  background-color: rgb(249, 223, 109);
-}
-
-#category-2 {
-  background-color: rgb(160, 195, 90);
-}
-
-#category-3 {
-  background-color: rgb(176, 196, 239);
-}
-
-#category-4 {
-  background-color: rgb(186, 129, 197);
+.hide {
+  display: none;
 }
 
 /* CARDS */
@@ -101,6 +86,11 @@ h1, h2 {
   text-transform: uppercase;
 }
 
+.selected {
+  background-color: rgb(90, 89, 78);
+  color: white;
+}  
+
 .tooltip {
   position: relative;
   display: inline-block;
@@ -111,7 +101,7 @@ h1, h2 {
   visibility: hidden;
   width: 120px;
   background-color: black;
-  color: #fff;
+  color: white;
   border-radius: 6px;
   padding: 5px;
   font-size: 12px;
@@ -150,54 +140,30 @@ h1, h2 {
 }
 
 .wordle .blank {
-  border: solid 1px rgb(211, 214, 218);
+  border: solid 1px white;
   background-color: black;
   color: white;
 }
 
-.selected {
-  background-color: rgb(90, 89, 78);
-  color: white;
-}  
-
-.selected .blank {
-  border-top: solid white 0.5px;
-  border-bottom: solid white 0.5px;
+.crossword .blank {
+  color: black;
 }
 
-.bounce {
-  animation: bounce 1s ease 1;
+.blank.reveal {
+  color: tomato;
 }
 
-@keyframes bounce {
-    70% { transform:translateY(0%); }
-    80% { transform:translateY(-15%); }
-    90% { transform:translateY(0%); }
-    95% { transform:translateY(-7%); }
-    97% { transform:translateY(0%); }
-    99% { transform:translateY(-3%); }
-    100% { transform:translateY(0); }
-}
+/* GAME CONTROLS */
 
-.shake {
-  animation: shake 1s ease 0.5;
-}
-
-@keyframes shake {
-	0%, 100% {transform: translateX(0);}
-	10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
-	20%, 40%, 60%, 80% {transform: translateX(10px);}
-}
-
-/* GAME CONTROLLER */
-
-fieldset {
-  border:none;
+#game-controls-container {
+  margin: auto;
+  width: auto;
+  text-align: center;
 }
 
 #mistakes-container {
   margin: auto;
-  width: calc(3 * 8px + 4 * 150px);
+  width: auto;
   text-align: center;
   padding: 20px;
 }
@@ -215,10 +181,8 @@ fieldset {
   vertical-align: middle;
 }
 
-#game-controls-container {
-  margin: auto;
-  width: calc(3 * 8px + 4 * 150px);
-  text-align: center;
+fieldset {
+  border: none;
 }
 
 input[type=button] {
@@ -248,9 +212,57 @@ input[type=button]:not([disabled]):hover {
   transform: translate(-50%);
 }
 
+/* CATEGORIES */
+
+#categories-container {
+  display: grid;
+  grid-template-columns: auto;
+  gap: 8px;
+  width: calc(3 * 8px + 4 * 150px);
+  margin: auto;
+  border: none;
+  margin-bottom: 8px;
+}
+
+.category {
+  height: 80px;
+  border-radius: 6px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.category p {
+  font-size: 20px;
+  line-height: 6px;
+}
+
+.category p:first-child {
+  padding-top: 5px;
+}
+
+.category-name {
+  font-weight: 700;
+}
+
+#difficulty-1 {
+  background-color: rgb(249, 223, 109);
+}
+
+#difficulty-2 {
+  background-color: rgb(160, 195, 90);
+}
+
+#difficulty-3 {
+  background-color: rgb(176, 196, 239);
+}
+
+#difficulty-4 {
+  background-color: rgb(186, 129, 197);
+}
+
 /* PUZZLE */
 
-.modal {
+#puzzle-modal {
   width: 80%;
   height: 800px;
   background-color: white;
@@ -262,7 +274,7 @@ input[type=button]:not([disabled]):hover {
   transform: translate(-50%, -50%);
 }
 
-.modal header {
+#puzzle-modal header {
   border-bottom: none;
   margin-bottom: 0px;
 }
@@ -282,42 +294,22 @@ input[type=button]:not([disabled]):hover {
   text-transform: capitalize;
 }
 
-.message {
-  text-align: center;
-  background-color: black;
-  color: white;
-  width: 200px;
-  padding: 10px;
-  border-radius: 6px;
-}
-
-#game-message {
-  top: 125px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  position: fixed;
-}
-
 #puzzle-message {
   margin: auto;
   margin-top: 100px;
 }
 
+/* WORDLE */
+
 .wordle-puzzle #puzzle-container {
   margin: auto;
   margin-top: 20px;
-  width: 350px;
-  height: 420px;
+  width: 390px;
+  height: auto;
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto auto auto auto auto auto;
   row-gap: 5px;
-}
-
-/* WORDLE */
-
-.wordle-puzzle #crossword-submit-btn {
-  display:none;
 }
 
 .row {
@@ -405,49 +397,160 @@ input[type=button]:not([disabled]):hover {
   border: solid 1px black;
 }
 
-.crossword .blank {
-  color: black;
+/* ANIMATIONS */
+
+.bounce {
+  animation: bounce 1s ease 1;
 }
 
-.blank.reveal {
-  color: tomato;
+@keyframes bounce {
+    70% { transform:translateY(0%); }
+    80% { transform:translateY(-15%); }
+    90% { transform:translateY(0%); }
+    95% { transform:translateY(-7%); }
+    97% { transform:translateY(0%); }
+    99% { transform:translateY(-3%); }
+    100% { transform:translateY(0); }
 }
 
-.violet {
-  color: rgb(186, 129, 197);
+.shake {
+  animation: shake 1s ease 0.5;
 }
 
-.green {
-  color: rgb(106, 170, 100);
+@keyframes shake {
+	0%, 100% {transform: translateX(0);}
+	10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
+	20%, 40%, 60%, 80% {transform: translateX(10px);}
 }
 
-.blue {
-  color: #a7d8ff;
+/* MEDIA QUERIES */
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  #subheading {
+    text-align: left;
+  }
+
+  #cards-container, #categories-container {
+    width: calc(3 * 8px + 4 * 100px);
+  }
+
+  .card {
+    width: 100px;
+    height: 100px;
+    font-size: 14px;
+  }
+
+  .tooltip .tooltiptext {
+    left: 0%
+  }
+
+  .blank {
+    width: 10px;
+    height: 12px;
+    border: solid 0.7px black;
+    font-size: 0.75em;
+  }
+
+  .category p {
+    font-size: 16px;
+  }
+
+  #puzzle-modal {
+    min-width: 484px;
+  }
+
+  .crossword-puzzle #puzzle-container {
+    grid-template-columns: repeat(auto-fill, 50px);
+  }
+
+  .cell {
+    height: 40px;
+    font-size: 32px;
+  }
+
+  #crossword-mistakes-container {
+    padding-left: 7px;
+  }
+
+  #crossword-submit-btn {
+    margin-left: 7px;
+  }
 }
 
-.yellow {
-  color: #ffda00;
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  #cards-container, #categories-container {
+    width: calc(3 * 8px + 4 * 125px);
+  }
+
+  .card {
+    width: 125px;
+    height: 100px;
+    font-size: 16px;
+  }
+
+  .tooltip .tooltiptext {
+    left: 0%
+  }
+
+  .blank {
+    width: 14px;
+    height: 16px;
+    border: solid 0.7px black;
+    font-size: 0.8em;
+  }
+
+  .crossword-puzzle #puzzle-container {
+    grid-template-columns: repeat(auto-fill, 50px);
+  }
+
+  .cell {
+    height: 40px;
+    font-size: 32px;
+  }
+
+  #crossword-mistakes-container {
+    padding-left: 7px;
+  }
+
+  #crossword-submit-btn {
+    margin-left: 7px;
+  }
+
 }
 
-/* FOR REFERENCE ONLY - NOT IN USE */
-/* .reference-colors {
-  color: white;
-  color: black;
-  color: rgb(90, 89, 78);
-  color: rgb(211, 214, 218);
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  #cards-container, #categories-container {
+    width: calc(3 * 8px + 4 * 150px);
+  }
 
-  color: #dcefff;
-  color: #ffda00;
-  color: #a7d8ff;
-  color: rgb(40, 96, 216);
+  .card {
+    width: 150px;
+    height: 80px;
+    font-size: 20px;
+  }
 
-  color: rgb(249, 223, 109);
-  color: rgb(160, 195, 90);
-  color: rgb(176, 196, 239);
-  color: rgb(186, 129, 197);
+  .blank {
+    width: 16px;
+    height: 18px;
+    border: solid 1px black;
+  }
+}
 
-  color: rgb(201, 180, 88);
-  color: rgb(106, 170, 100);
-  color: rgb(120, 124, 126);
-} */
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  #puzzle-modal {
+    max-width: 800px;
+  }
 
+  .crossword-puzzle #puzzle-container {
+    grid-template-columns: repeat(auto-fill, 60px);
+  }
+
+  .cell {
+    height: 40px;
+    font-size: 36px;
+  }
+}
