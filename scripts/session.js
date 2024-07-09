@@ -2,7 +2,7 @@ class Session {
   constructor() {
     this.playedGameIndexes = [];
     this.data = this.getGameData();
-    this.game = new Connections(this.data);
+    this.game = new Game(this.data);
     this.subHeading = document.getElementById('subheading');
     this.cardsContainer = document.getElementById('cards-container');
     this.mistakesContainer = document.getElementById('mistakes-container');
@@ -90,7 +90,7 @@ class Session {
 
   resetGame() {
     this.data = this.getGameData();
-    this.game = new Connections(this.data);
+    this.game = new Game(this.data);
   }
 
   resetSession() {

@@ -1,4 +1,4 @@
-class Connections {
+class Game {
   constructor(data) {
     this.deck = this.createDeck(data);
     this.currentCard;
