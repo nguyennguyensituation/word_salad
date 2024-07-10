@@ -1,94 +1,121 @@
 # Word Salad
 
-Word Salad is The New York Times Connections, Crossword, and Wordle games...all at the same time.
+Word Salad is a loving homage to the most popular puzzles from The New York Times. It combines Connections, Wordle, and the crossword into a single Frankenstein's monster mashup of a game.
 
-![Game board](/images/game-board.png)
+## Getting Started
 
-# How to Play
+1. Clone this repo.
+2. Open `index.html` in the browser.
 
-The game board is comprised of 16 cards. Some of the cards already have words on them. Some of the cards contain a puzzle that you'll need to solve before you can reveal the word.
+## Built with
 
-1. Solve the puzzles on the blank cards to reveal the words.
-2. After all the words have been revealed, find the four categories of four words that share something in common.
+* JavaScript
+* Handlebars
+* HTML
+* CSS
 
-## Installation
+## How to Play
 
-Open the index.html file in the browser.
+The board is comprised of 16 cards. Some of the cards already have words on them. Some of the cards contain a puzzle that you'll need to solve to reveal the word.
 
-## Notes for Emily
+![Game board](/images/screenshots/game_board.png)
 
-Thank you for reviewing my work! I know this takes a long time and is actual work, and I appreciate any level of review that you have time for, whether it's some high-level notes or more granular feedback.
+<br>
 
-One thing I would love advice on is best practices on how to structure my code. Should certain things be moved to a separate file (e.g. Handlebars templates)? Should I organize my classes differently?
+**1. Click on a blank card to open a puzzle. The puzzle will be either a Wordle or a crossword. Solve the puzzle to reveal the word.**
 
-Known issues:
-- There is data for only 1 game right now. I just wanted to get it working first, but I may add more games in the future.
-- The close button is difficult to click
-- You can currently submit words that don't actually exist in the dictionary
-- You can submit words/categories that you've already submitted
-- The crossword...is not actually a crossword. (Still deciding how complex I want to get with this.)
-- Animations don't match the real NYT animations exactly
+<img src="images/screenshots/wordle_solved.png" width="50%">
+
+<img src="images/screenshots/crossword_solved.png" width="50%">  
+
+<br>
+
+**2. After all the words have been revealed, select a group of four cards that have something in common.**
+
+![Game board](/images/screenshots/selected_cards.png)
+
+<br>
+
+**3. If you select the correct group of cards, a category will be revealed.**
+
+![Game board](/images/screenshots/one_category_solved.png)
+
+<br>
+
+**4. Continue selecting groups of four cards until you've found all the categories.**
+
+![Game board](/images/screenshots/all_categories_solved.png)
+
+## Features
+### Connections
+**Solving puzzles**
+* After you solve a puzzle, the word will appear on the card in black text.
+* If you don't solve the puzzle, the word will appear on the card in red text.
+
+**Selecting cards**
+* You can only select four cards at a time.
+* You can't guess the same set of cards twice.
+* You can make up to three incorrect attempts to guess all the categories.
+
+---
+
+### Wordle
+* When you submit a word, tile colors change to show you how close you are to getting the correct word.
+  * Green - The letter is in the correct position
+  * Yellow - The word contains that letter but it is in the incorrect position
+  * Gray - The word does not contain that letter
+* You can't guess the same word twice.
+* The word you submit must be in the Wordle dictionary.
+
+---
+
+### Crossword
+* You can't guess the same word twice.
+* You have four chances to guess a word.
+
+## Potential Roadmap
+
+- [ ] Game summary that shows number of wordles, crosswords, and connections solved
+- [ ] More robust Crossword
+  - [ ] After each guess, show the letters that are correct
+  - [ ] User can't enter a new value for letters that are correct
+- [ ] After the connections game has been played, the board flips over and turns into different puzzles:
+  - [ ] Sudoku
+  - [ ] Spelling Bee
+  - [ ] Strands
+- [ ] User can close an incomplete puzzle and continue solving it
+- [ ] More robust animations
+- [ ] Game data is stored in database
+- [ ] Track usage data
 
 ## Answer Key
 
 ```
-CORE
+GAME 1
 
-[CRUX, ESSENCE, HEART, SUBSTANCE]
+CORE: [HEART (wordle), CRUX (crossword clue: "Gist"), ESSENCE, SUBSTANCE]
+
+COMPLICATED: [MESSY (wordle), BAROQUE (crossword clue: "Music style popularized by Bach"), COMPLEX, ELABORATE]
+
+SYMBOLS USED IN MAKING LISTS: [ARROW (wordle), BULLET (crossword clue: "Muggsy Bogues or Manute Bol, once), CHECKBOX, HYPHEN]
+
+WHAT 'CROSS' MIGHT MEAN: [ANGRY (wordle), CRUCIFIX (crossword clue: "One of those 'T' necklaces, maybe"), BETRAY, HYBRID]
 ```
-
 ```
-COMPLICATED
+LATIN WORDS: [CARPE (wordle), QUID (crossword clue: "A pound across the pond, perhaps"), ERGO, VOX]
 
-[BAROQUE, COMPLEX, ELABORATE, MESSY]
+PACK (AWAY) FOR FUTURE USE: [STORE (wordle), SQUIRREL (crossword clue: "________ Nut Zippers"), STASH, STOW]
+
+________ GAME: [SQUID (wordle), ARCADE (crossword clue: "where you might find Ms. Pac-Man"), BLAME, NUMBERS]
+
+ADJECTIVES FOR ASSETS: [TOXIC (wordle), FROZEN (crossword clue: "Ice cold"), FIXED, LIQUID]
 ```
-
 ```
-SYMBOLS USED IN MAKING LISTS
+HIGHLY SKILLED: [ADEPT (wordle), ACE (crossword clue: "Part of a winning pair in blackjack"), MAESTRO, HOTSHOT]
 
-[ARROW, BULLET, CHECKBOX, HYPHEN]
-```
+KINDS OF CAKE: [POUND (wordle), CRUMB (crossword clue: "The soft part of bread"), MARBLE, BIRTHDAY]
 
-```
-WHAT 'CROSS' MIGHT MEAN
+TANGIBLE: [SOLID (wordle), MATERIAL (crossword clue: "Half of a moniker for Madonna"), CONCRETE, REAL]
 
-[ANGRY, BETRAY, CRUCIFIX, HYBRID]
-```
-
-## Todos
-_Emily: These are my WIP notes! Feel free to ignore! (Or not!)_
-```
-MVP:
-- Make close puzzle button div easier to click
-
-- Show score at the end of game:
-  - Number of wordles solved
-  - Number of crosswords solved
-  - Number of categories found
-
-- Clean up templates
-  - Card properties to remove: noPuzzle, wordle, and crossword
-  - Card property to add: puzzleType (string, possible values: 'none', 'wordle', 'crossword')
-  - Update Handlebars template to reference new puzzleType property
-
-Potential V2 updates:
-- Add additional game data
-- Games database?
-- Puzzles
-  - User can close incomplete puzzle
-  - User can reopen incomplete puzzle and previous state is saved
-  - User can only submit real words that exist in dictionary
-  - User can't submit the same word twice
-- Crossword is more-crossword like
-  - Make actual mini crossword? (harder)
-  - Allow letter hints (easier) 
-  - Add instructions
-- Wordle
-  - Add keyboard? (not sure if this is necessary on desktop)
-  - Add instructions
-- Connections
-  - When showing all categories, categories should be sorted with the ones the user found first, then by difficulty
-  - Add instructions
-- Make Puzzle class and extract some of the game play functions into this?  
-- More robust animations
+THINGS YOU CAN THROW IN METAPHORS: [PARTY (wordle), WRENCH (crossword clue: "To pull or twist"), CURVEBALL, TANTRUM]
 ```
