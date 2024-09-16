@@ -22,3 +22,5 @@ function shakeAnimation(divs) {
     }, 500) 
   });
 }
+
+export { bounceAnimation, shakeAnimation };

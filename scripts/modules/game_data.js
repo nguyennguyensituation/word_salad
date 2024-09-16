@@ -135,3 +135,5 @@ const GAME_DATA = [
     ]
   }
 ]
+
+export { GAME_DATA };

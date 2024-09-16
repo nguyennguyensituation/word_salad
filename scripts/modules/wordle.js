@@ -1,3 +1,7 @@
+import { Puzzle } from "./puzzle.js";
+import { VALID_WORDLE_WORDS } from "./wordle_dictionary.js";
+import { bounceAnimation, shakeAnimation } from "./animations.js";
+
 class Wordle extends Puzzle {
   constructor(word) {
     super('wordle', word);
@@ -114,3 +118,5 @@ class Wordle extends Puzzle {
     row.classList.remove('incomplete-row');
   }
 }
+
+export { Wordle };

@@ -1,3 +1,7 @@
+import { Game } from "./game.js";
+import { GAME_DATA } from "./game_data.js";
+import { bounceAnimation, shakeAnimation } from "./animations.js";
+
 class Session {
   constructor() {
     this.playedGameIndexes = [];
@@ -301,3 +305,5 @@ class Session {
     })
   }
 }
+
+export { Session };

@@ -1,3 +1,7 @@
+import { Puzzle } from "./puzzle.js";
+import { Crossword } from "./crossword.js";
+import { Wordle } from "./wordle.js";
+
 class Card {
   constructor(id, categoryName, wordData) {
     this.id = id;
@@ -29,3 +33,5 @@ class Card {
     return this.wordValue.toLowerCase().split('');
   }
 }
+
+export { Card };

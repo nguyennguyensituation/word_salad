@@ -1,3 +1,5 @@
+import { Card } from "./card.js";
+
 class Game {
   constructor(data) {
     this.deck = this.createDeck(data);
@@ -68,3 +70,5 @@ class Game {
     }
   }
 }
+
+export { Game };

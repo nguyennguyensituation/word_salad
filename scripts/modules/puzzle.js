@@ -66,3 +66,5 @@ class Puzzle {
     this.puzzleSolved = isSolved;
   }
 }
+
+export { Puzzle };

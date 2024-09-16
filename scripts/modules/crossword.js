@@ -1,3 +1,6 @@
+import { Puzzle } from "./puzzle.js";
+import { bounceAnimation, shakeAnimation } from "./animations.js";
+
 class Crossword extends Puzzle {
   constructor(word, crosswordClue) {
     super('crossword', word);
@@ -93,3 +96,5 @@ class Crossword extends Puzzle {
     squares.forEach(square => square.classList.add('solved-cell'));
   }
 }
+
+export { Crossword };
