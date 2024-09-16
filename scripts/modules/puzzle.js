@@ -1,3 +1,5 @@
+import { bounceAnimation, shakeAnimation } from "./animations.js";
+
 class Puzzle {
   constructor(type, word) {
     this.type = type;
@@ -6,6 +8,8 @@ class Puzzle {
     this.puzzleSolved = false;
     this.guessedLetters = [];
     this.guessedWords = [];
+    this.bounceAnimation = bounceAnimation;
+    this.shakeAnimation = shakeAnimation;
   }
 
   getMove(input) {

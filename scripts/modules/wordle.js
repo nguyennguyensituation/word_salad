@@ -1,6 +1,5 @@
 import { Puzzle } from "./puzzle.js";
 import { VALID_WORDLE_WORDS } from "./wordle_dictionary.js";
-import { bounceAnimation, shakeAnimation } from "./animations.js";
 
 class Wordle extends Puzzle {
   constructor(word) {
@@ -24,7 +23,7 @@ class Wordle extends Puzzle {
       } else {
         const message = this.isUniqueGuess(word) ? "That word isn't in the word list." : "You already guessed that word!";
 
-        shakeAnimation([...row.children]);
+        this.shakeAnimation([...row.children]);
         this.showPuzzleMessage(message, true)
       }
     }
@@ -101,7 +100,7 @@ class Wordle extends Puzzle {
     const isLastRow = row.id === 'row-5';
 
     if (isWinningGuess) { 
-      bounceAnimation([...row.children]);
+      this.bounceAnimation([...row.children]);
       this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
       this.setPuzzleSolved();
     } else if (isLastRow) {

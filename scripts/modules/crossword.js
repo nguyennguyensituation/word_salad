@@ -1,5 +1,4 @@
 import { Puzzle } from "./puzzle.js";
-import { bounceAnimation, shakeAnimation } from "./animations.js";
 
 class Crossword extends Puzzle {
   constructor(word, crosswordClue) {
@@ -60,12 +59,12 @@ class Crossword extends Puzzle {
     this.addToGuessedWords(word);
 
     if (isWinningGuess) {
-      bounceAnimation(letterDivs);
+      this.bounceAnimation(letterDivs);
       this.styleResults(letterDivs);
       this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
       this.setPuzzleSolved();
     } else {
-      shakeAnimation(letterDivs);
+      this.shakeAnimation(letterDivs);
       this.decrementCrosswordMistakes();
 
       if (this.crosswordMistakesRemaining === 0) { 
