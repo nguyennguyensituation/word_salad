@@ -5,12 +5,17 @@ Word Salad is a loving homage to the most popular puzzles from The New York Time
 ## Getting Started
 
 1. Clone this repo.
-2. Open `index.html` in the browser.
+2. If you don't already it installed, you can [download Node from nodejs.org](https://nodejs.org/en/download/package-manager).
+3. Install [http-server](https://www.npmjs.com/package/http-server).
+1. Start the server locally
+```
+  http-server -p 8080 --cors
+```
+1. Visit http://localhost:8080 to view Word Salad
 
 ## Built with
 
 * JavaScript
-* Handlebars
 * HTML
 * CSS
 
@@ -75,10 +80,9 @@ The board is comprised of 16 cards. Some of the cards already have words on them
 
 ## Potential Roadmap
 
-- [ ] Game summary that shows number of wordles, crosswords, and connections solved
+- [ ] Game summary that shows number of Wordles, Crosswords, and Connections solved
 - [ ] More robust Crossword
   - [ ] After each guess, show the letters that are correct
-  - [ ] User can't enter a new value for letters that are correct
 - [ ] After the connections game has been played, the board flips over and turns into different puzzles:
   - [ ] Sudoku
   - [ ] Spelling Bee
