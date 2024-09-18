@@ -54,7 +54,27 @@ class Wordle extends Puzzle {
   }
 
   isValidWordleWord(word) {
-    return VALID_WORDLE_WORDS.includes(word);
+    let left = 0;
+    let right = VALID_WORDLE_WORDS.length - 1;
+
+    while (left <= right) {
+      let mid = Math.floor((left + right) / 2);
+      console.log("test ==============>");
+      console.log("current mid:" + VALID_WORDLE_WORDS[mid]);
+      if (VALID_WORDLE_WORDS[mid] === word) {
+        return true;
+      } else if (VALID_WORDLE_WORDS[mid] < word) {
+        console.log("check right side");
+        left = mid + 1;
+      } else {
+        console.log("check left side");
+        right = mid - 1;
+      }
+    }
+
+    console.log("returning false")
+    return false;
+    // return VALID_WORDLE_WORDS.includes(word);
   }
 
   // Return array of results for each guessed letter
