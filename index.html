@@ -1,13 +1,104 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=0, width=device-width">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bevan:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script id="wordle-row-template" type="text/x-handlebars">
+      <div class="row incomplete-row" id="row-{{@index}}">
+        <div class="tile" id="tile-{{@index}}-0"></div>
+        <div class="tile" id="tile-{{@index}}-1"></div>
+        <div class="tile" id="tile-{{@index}}-2"></div>  
+        <div class="tile" id="tile-{{@index}}-3"></div>
+        <div class="tile" id="tile-{{@index}}-4"></div>
+      </div>
+    </script>
+    <script id="wordle-template" type="text/x-handlebars">
+      <header>
+        <h2 id="puzzle-title" class="green">Wordle</h2>
+      </header>
+      <button id="close-puzzle-btn" class="hide">&#215;</button>
+
+      <section id="puzzle-container">
+        {{#each rows}}
+        {{>wordleRowTemplate}}
+        {{/each}}
+      </section>
+
+      <section>
+        <div id="puzzle-message" class="message hide"></div>
+        <div id="wordle-result"></div>
+      </section>
+    </script>
+    <script id="crossword-template" type="text/x-handlebars">
+      <header>
+        <h2 id="puzzle-title" class="blue">Crossword</h2>
+        <p id="crossword-clue">{{crosswordClue}}</p>
+      </header>
+      <button id="close-puzzle-btn" class="hide">&#215;</button>
+      
+      <section id="puzzle-container">
+        {{#each letters}}
+        <div class="cell" id="cell-{{@index}}"></div>
+        {{/each}}
+      </section>
+
+      <fieldset id="crossword-controls">
+        <section id="crossword-mistakes-container">
+          <p>Mistakes remaining:</p>
+          {{#each mistakesRemaining}}
+            <span class="dot"></span>
+          {{/each}}
+        </section>
+        
+        <input id="crossword-submit-btn" type="button" value="Submit" disabled>
+      </fieldset>
+
+      <div id="puzzle-message" class="message hide"></div>
+    </script>
+    <script id="mistakes-dot-template" type="text/x-handlebars">
+      <p>Mistakes remaining:</p>
+      {{#each mistakesRemaining}}
+        <span class="dot"></span>
+      {{/each}}
+    </script>
+    <script id="card-template" type="text/x-handlebars">
+      {{#each cards}}
+        {{#unless puzzle.puzzlePlayed}}
+        <div class="tooltip">
+        {{/unless}}
+
+        <article id="card-{{id}}" class="card {{#if (isWordle puzzle)}}wordle{{/if}} {{#if (isCrossword puzzle)}}crossword{{/if}} {{#if selected}}selected{{/if}}" card-value="{{wordValue}}" name={{wordValue}}>
+        {{#if (noPuzzle puzzle)}}
+          {{wordValue}}
+        {{else}}
+        {{#each letters}}
+          <div class="blank {{#unless ../cardSolved}}reveal{{/unless}}">{{this}}</div>
+        {{/each}}
+        {{/if}}
+        
+        {{#unless puzzle.puzzlePlayed}}
+          <span class="tooltiptext">Solve this puzzle to reveal the word</span>
+        {{/unless}}
+        </article> 
+
+        {{#unless puzzle.puzzlePlayed}}
+        </div>
+        {{/unless}}
+      {{/each}}
+    </script>
+    <script id="category-template" type="text/x-handlebars">
+      {{#each categories}}
+      <div class="category" id="difficulty-{{difficulty}}">
+        <p class="category-name">{{name}}</p>
+        <p>{{words}}</p>
+      </div>
+      {{/each}}
+    </script>
     <script src="scripts/app.js" type="module"></script>
     <title>wOrd sALaD</title>
     <link rel="icon" type="image/x-icon" href="images/favicon/favicon.ico">
@@ -30,8 +121,7 @@
     <article id="cards-container"></article>
 
     <section id="game-controls-container">
-      <section id="mistakes-container">
-      </section>
+      <section id="mistakes-container"></section>
 
       <fieldset>
         <input id="shuffle-btn" type="button" value="Shuffle">
@@ -45,100 +135,3 @@
     <article id="puzzle-modal" class="hide"></article>
   </body>
 </html>
-
-<!-- TEMPLATES -->
-<script id="wordle-row-template" type="text/x-handlebars">
-  <div class="row incomplete-row" id="row-{{@index}}">
-    <div class="tile" id="tile-{{@index}}-0"></div>
-    <div class="tile" id="tile-{{@index}}-1"></div>
-    <div class="tile" id="tile-{{@index}}-2"></div>  
-    <div class="tile" id="tile-{{@index}}-3"></div>
-    <div class="tile" id="tile-{{@index}}-4"></div>
-  </div>
-</script>
-
-<script id="wordle-template" type="text/x-handlebars">
-  <button id="close-puzzle-btn" class="hide">&#215;</button>
-  <h2 id="puzzle-title" class="green">Wordle</h2>
-
-  <section id="puzzle-container">
-    {{#each rows}}
-    {{>wordleRowTemplate}}
-    {{/each}}
-  </section>
-
-  <section>
-    <div id="puzzle-message" class="message hide"></div>
-    <div id="wordle-result"></div>
-  </section>
-</script>
-
-<script id="crossword-template" type="text/x-handlebars">
-  <button id="close-puzzle-btn" class="hide">X</button>
-
-  <header>
-    <h2 id="puzzle-title" class="blue">Crossword</h2>
-    <p id="crossword-clue">{{crosswordClue}}</p>
-  </header>
-  
-  <section id="puzzle-container">
-    {{#each letters}}
-    <div class="cell" id="cell-{{@index}}"></div>
-    {{/each}}
-  </section>
-
-  <fieldset id="crossword-controls">
-    <section id="crossword-mistakes-container">
-      <p>Mistakes remaining:</p>
-      {{#each mistakesRemaining}}
-        <span class="dot"></span>
-      {{/each}}
-    </section>
-    
-    <input id="crossword-submit-btn" type="button" value="Submit" disabled>
-  </fieldset>
-
-  <div id="puzzle-message" class="message hide"></div>
-</script>
-
-<script id="mistakes-dot-template" type="text/x-handlebars">
-  <p>Mistakes remaining:</p>
-  {{#each mistakesRemaining}}
-    <span class="dot"></span>
-  {{/each}}
-</script>
-
-<script id="card-template" type="text/x-handlebars">
-  {{#each cards}}
-    {{#unless puzzle.puzzlePlayed}}
-    <div class="tooltip">
-    {{/unless}}
-
-    <article id="card-{{id}}" class="card {{#if (isWordle puzzle)}}wordle{{/if}} {{#if (isCrossword puzzle)}}crossword{{/if}} {{#if selected}}selected{{/if}}" card-value="{{wordValue}}" name={{wordValue}}>
-    {{#if (noPuzzle puzzle)}}
-      {{wordValue}}
-    {{else}}
-    {{#each letters}}
-      <div class="blank {{#unless ../cardSolved}}reveal{{/unless}}">{{this}}</div>
-    {{/each}}
-    {{/if}}
-    
-    {{#unless puzzle.puzzlePlayed}}
-      <span class="tooltiptext">Solve this puzzle to reveal the word</span>
-    {{/unless}}
-    </article> 
-
-    {{#unless puzzle.puzzlePlayed}}
-    </div>
-    {{/unless}}
-  {{/each}}
-</script>
-
-<script id="category-template" type="text/x-handlebars">
-  {{#each categories}}
-  <div class="category" id="difficulty-{{difficulty}}">
-    <p class="category-name">{{name}}</p>
-    <p>{{words}}</p>
-  </div>
-  {{/each}}
-</script>
