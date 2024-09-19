@@ -1,6 +1,6 @@
 # Word Salad
 
-Word Salad is a loving homage to the most popular puzzles from The New York Times. It combines Connections, Wordle, and the crossword into a single Frankenstein's monster mashup of a game.
+**Word Salad** is a loving homage to the most popular puzzles from _The New York Times_. It combines Connections, Wordle, and the crossword into a single Frankenstein's monster mashup of a game.
 
 ## Getting Started
 
@@ -35,13 +35,13 @@ The board is comprised of 16 cards. Some of the cards already have words on them
 
 <br>
 
-**2. After all the words have been revealed, select a group of four cards that have something in common.**
+**2. After all the words have been revealed, you can play Connections. Select a set of four cards that have something in common.**
 
 ![Game board](/images/screenshots/selected_cards.png)
 
 <br>
 
-**3. If you select the correct group of cards, a category will be revealed.**
+**3. If you select the correct group of cards, the category will be revealed.**
 
 ![Game board](/images/screenshots/one_category_solved.png)
 
@@ -57,10 +57,11 @@ The board is comprised of 16 cards. Some of the cards already have words on them
 * After you solve a puzzle, the word will appear on the card in black text.
 * If you don't solve the puzzle, the word will appear on the card in red text.
 
-**Selecting cards**
+**Selecting categories**
 * You can only select four cards at a time.
 * You can't guess the same set of cards twice.
 * You can make up to three incorrect attempts to guess all the categories.
+* The game will tell you if you are one card away from completing a category
 
 ---
 
@@ -87,8 +88,7 @@ The board is comprised of 16 cards. Some of the cards already have words on them
   - [ ] Sudoku
   - [ ] Spelling Bee
   - [ ] Strands
-- [ ] More robust animations
-- [ ] Game data is stored in database
+- [ ] Game data is stored in a database
 - [ ] Track usage data
 
 ## Answer Key
