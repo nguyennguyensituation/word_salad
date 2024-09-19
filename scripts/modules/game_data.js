@@ -133,7 +133,142 @@ const GAME_DATA = [
         ]
       },
     ]
-  }
+  },
+  {
+    id: 4,
+    categories: [
+      {
+        difficulty: 1,
+        categoryName: "get excited, with 'up'",
+        categoryWords: [
+          { wordValue: 'fire', miniPuzzle: 'crossword', crosswordClue: "Earth wind and ____"},
+          { wordValue: 'hype', miniPuzzle: 'none'},
+          { wordValue: 'psych', miniPuzzle: 'wordle' },
+          { wordValue: 'amp', miniPuzzle: 'none'},
+        ]
+      },
+      {
+        difficulty: 2,
+        categoryName: "kinds of shoes",
+        categoryWords: [
+          { wordValue: 'pump', miniPuzzle: 'none' },
+          { wordValue: 'flat', miniPuzzle: 'crossword', crosswordClue: "A tire might get this"},
+          { wordValue: 'mule', miniPuzzle: 'none'},
+          { wordValue: 'slide', miniPuzzle: 'wordle'},
+        ]
+      },
+      {
+        difficulty: 3,
+        categoryName: "legislative roles",
+        categoryWords: [
+          { wordValue: 'speaker', miniPuzzle: 'none' },
+          { wordValue: 'whip', miniPuzzle: 'crossword', crosswordClue: "Part of a lion tamer's constume"},
+          { wordValue: 'leader', miniPuzzle: 'none' },
+          { wordValue: 'chair', miniPuzzle: 'wordle' },
+        ]
+      },
+      {
+        difficulty: 4,
+        categoryName: "name homophones",
+        categoryWords: [
+          { wordValue: 'mic', miniPuzzle: 'none' },
+          { wordValue: 'matte', miniPuzzle: 'wordle' },
+          { wordValue: 'dug', miniPuzzle: 'none' },
+          { wordValue: 'peat', miniPuzzle: 'crossword', crosswordClue: "Basketball suffix with 'three'"},
+        ]
+      },
+    ]
+  },
+  {
+    id: 5,
+    categories: [
+      {
+        difficulty: 1,
+        categoryName: "reside",
+        categoryWords: [
+          { wordValue: 'stay', miniPuzzle: 'crossword', crosswordClue: "Lisa Loeb song"},
+          { wordValue: 'inhabit', miniPuzzle: 'none'},
+          { wordValue: 'dwell', miniPuzzle: 'wordle' },
+          { wordValue: 'live', miniPuzzle: 'none'},
+        ]
+      },
+      {
+        difficulty: 2,
+        categoryName: "decrease",
+        categoryWords: [
+          { wordValue: 'dwindle', miniPuzzle: 'none' },
+          { wordValue: 'drop', miniPuzzle: 'crossword', crosswordClue: "What you might do to a hot potato"},
+          { wordValue: 'decline', miniPuzzle: 'none'},
+          { wordValue: 'abate', miniPuzzle: 'wordle'},
+        ]
+      },
+      {
+        difficulty: 3,
+        categoryName: "doofus",
+        categoryWords: [
+          { wordValue: 'sap', miniPuzzle: 'none' },
+          { wordValue: 'dweeb', miniPuzzle: 'crossword', crosswordClue: "A nerdy type"},
+          { wordValue: 'turkey', miniPuzzle: 'none' },
+          { wordValue: 'clown', miniPuzzle: 'wordle' },
+        ]
+      },
+      {
+        difficulty: 4,
+        categoryName: "member of a septet",
+        categoryWords: [
+          { wordValue: 'sea', miniPuzzle: 'none' },
+          { wordValue: 'dwarf', miniPuzzle: 'wordle' },
+          { wordValue: 'sin', miniPuzzle: 'none' },
+          { wordValue: 'wonder', miniPuzzle: 'crossword', crosswordClue: "He just called to say, 'I love you'"},
+        ]
+      },
+    ]
+  },
+  {
+    id: 6,
+    categories: [
+      {
+        difficulty: 1,
+        categoryName: "vitality",
+        categoryWords: [
+          { wordValue: 'life', miniPuzzle: 'crossword', crosswordClue: "Board game or cereal, perhaps"},
+          { wordValue: 'energy', miniPuzzle: 'none'},
+          { wordValue: 'juice', miniPuzzle: 'wordle' },
+          { wordValue: 'zip', miniPuzzle: 'none'},
+        ]
+      },
+      {
+        difficulty: 2,
+        categoryName: "palindromes featuring 'e'",
+        categoryWords: [
+          { wordValue: 'pep', miniPuzzle: 'none' },
+          { wordValue: 'tenet', miniPuzzle: 'crossword', crosswordClue: "Christopher Nolan movie"},
+          { wordValue: 'refer', miniPuzzle: 'none'},
+          { wordValue: 'level', miniPuzzle: 'wordle'},
+        ]
+      },
+      {
+        difficulty: 3,
+        categoryName: "featured in 'jack and the beanstalk'",
+        categoryWords: [
+          { wordValue: 'cow', miniPuzzle: 'none' },
+          { wordValue: 'giant', miniPuzzle: 'crossword', crosswordClue: "Enormous"},
+          { wordValue: 'jack', miniPuzzle: 'none' },
+          { wordValue: 'beans', miniPuzzle: 'wordle' },
+        ]
+      },
+      {
+        difficulty: 4,
+        categoryName: "car models",
+        categoryWords: [
+          { wordValue: 'volt', miniPuzzle: 'none' },
+          { wordValue: 'civic', miniPuzzle: 'wordle' },
+          { wordValue: 'focus', miniPuzzle: 'none' },
+          { wordValue: 'beetle', miniPuzzle: 'crossword', crosswordClue: "A ladybug is a type of this"},
+        ]
+      },
+    ]
+  },
 ]
 
 export { GAME_DATA };
