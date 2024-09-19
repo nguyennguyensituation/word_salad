@@ -23,4 +23,12 @@ function shakeAnimation(divs) {
   });
 }
 
-export { bounceAnimation, shakeAnimation };
+function tileFocusAnimation(tile) {
+  tile.classList.add('tile-focus');
+
+  setTimeout(() => {
+    tile.classList.remove('tile-focus');
+  }, 100) 
+}
+
+export { bounceAnimation, shakeAnimation, tileFocusAnimation };

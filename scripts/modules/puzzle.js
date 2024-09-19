@@ -1,4 +1,4 @@
-import { bounceAnimation, shakeAnimation } from "./animations.js";
+import { bounceAnimation, shakeAnimation, tileFocusAnimation } from "./animations.js";
 
 class Puzzle {
   constructor(type, word) {
@@ -10,6 +10,7 @@ class Puzzle {
     this.guessedWords = [];
     this.bounceAnimation = bounceAnimation;
     this.shakeAnimation = shakeAnimation;
+    this.tileFocusAnimation = tileFocusAnimation;
   }
 
   getMove(input) {
@@ -33,6 +34,7 @@ class Puzzle {
   }
 
   updateLetter(letter, value = '') {
+    this.tileFocusAnimation(letter);
     letter.innerHTML = value;
 
     if (!value) {

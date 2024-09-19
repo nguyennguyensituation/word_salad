@@ -332,6 +332,10 @@ input[type=button]:not([disabled]):hover {
   text-transform: uppercase;
 }
 
+.tile-focus {
+  scale: 1.1;
+}
+
 .correct {
   background-color: rgb(106, 170, 100);
   border: solid 2px rgb(106, 170, 100);
