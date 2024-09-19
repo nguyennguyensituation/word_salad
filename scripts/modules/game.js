@@ -61,13 +61,10 @@ class Game {
     this.selectedCards = [];
   }
 
-   // Return categoryName if all selected cards belong to the same category
-   getSolvedCategoryName() {
-    const firstCategory = this.selectedCards[0].categoryName;
+  selectedCategories() {
+    let categories = this.selectedCards.map(card => card.categoryName);
 
-    if (this.selectedCards.every(card => card.categoryName === firstCategory)) {
-      return firstCategory;
-    }
+    return [...new Set(categories)]
   }
 }
 

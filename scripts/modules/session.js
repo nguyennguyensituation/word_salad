@@ -241,11 +241,14 @@ class Session {
       } else {
         bounceAnimation(selectedCardDivs);
         this.game.guessedCards.push(this.game.selectedCards);
-       
-        const solvedCategory = this.game.getSolvedCategoryName() ?? null;
+  
+        const selectedCategories = this.game.selectedCategories();
 
-        if (solvedCategory) {
-          this.submitCorrectCards(solvedCategory);
+        if (selectedCategories.length === 1) {
+          this.submitCorrectCards(selectedCategories[0]);
+        } else if (selectedCategories.length === 2) {
+          this.showMessage("One away!");
+          this.submitIncorrectCards(selectedCardDivs);
         } else {
           this.submitIncorrectCards(selectedCardDivs);
         }
