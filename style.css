@@ -276,9 +276,19 @@ input[type=button]:not([disabled]):hover {
 }
 
 #puzzle-modal header {
-  display: inline-block;
-  border-bottom: none;
+  border-bottom: solid 1px black;
   margin-bottom: 0px;
+  display: grid;
+  grid-template: auto 70px;
+}
+
+#puzzle-modal header section {
+  display: grid;
+  grid-template-columns: auto 50px;
+}
+
+#puzzle-title {
+  text-transform: capitalize;
 }
 
 #close-puzzle-btn {
@@ -289,16 +299,17 @@ input[type=button]:not([disabled]):hover {
   border: none;
   font-size: 2em;
   cursor: pointer;
-  float:inline-end;
+  justify-self: right;
 }
 
-#puzzle-title {
-  text-transform: capitalize;
+.puzzle-instructions {
+  margin: 0;
+  padding-bottom: 20px;
 }
 
 #puzzle-message {
   margin: auto;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 /* WORDLE */

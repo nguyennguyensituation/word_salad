@@ -19,9 +19,12 @@
     </script>
     <script id="wordle-template" type="text/x-handlebars">
       <header>
-        <h2 id="puzzle-title" class="green">Wordle</h2>
+        <section>
+          <h2 id="puzzle-title" class="green">Wordle</h2>
+          <button id="close-puzzle-btn" class="hide">&#215;</button>
+        </section>
+        <p class="puzzle-instructions"><b>How to play:</b> Try to guess the word in 6 tries. The tile color will change to show how close you are to the word. Green means the letter is in the correct spot. Yellow means the word contains the letter but is in the wrong spot. Gray  means the word doesn't contain that letter.</p>
       </header>
-      <button id="close-puzzle-btn" class="hide">&#215;</button>
 
       <section id="puzzle-container">
         {{#each rows}}
@@ -36,11 +39,14 @@
     </script>
     <script id="crossword-template" type="text/x-handlebars">
       <header>
-        <h2 id="puzzle-title" class="blue">Crossword</h2>
-        <p id="crossword-clue">{{crosswordClue}}</p>
+        <section>
+          <h2 id="puzzle-title" class="blue">Crossword</h2>
+          <button id="close-puzzle-btn" class="hide">&#215;</button>
+        </section>
+        <p class="puzzle-instructions"><b>How to play:</b> Try to guess the word in 4 tries.</p>
       </header>
-      <button id="close-puzzle-btn" class="hide">&#215;</button>
       
+      <p id="crossword-clue">{{crosswordClue}}</p>
       <section id="puzzle-container">
         {{#each letters}}
         <div class="cell" id="cell-{{@index}}"></div>
