@@ -31,4 +31,21 @@ function tileFocusAnimation(tile) {
   }, 100) 
 }
 
-export { bounceAnimation, shakeAnimation, tileFocusAnimation };
+function tileFlipAnimation(tiles, results) {
+  let timer = 0;
+
+  tiles.forEach((tile, idx) => {
+    let status = results[idx];
+    setTimeout(() => {
+      tile.classList.add('flip');
+    }, timer);
+    setTimeout(() => {
+      tile.classList.add(status);
+    }, timer + 250);
+
+
+    timer += 600;
+  })
+}
+
+export { bounceAnimation, shakeAnimation, tileFocusAnimation, tileFlipAnimation };

@@ -1,5 +1,6 @@
 import { Puzzle } from "./puzzle.js";
 import { VALID_WORDLE_WORDS } from "./wordle_dictionary.js";
+import { tileFlipAnimation } from "./animations.js";
 
 class Wordle extends Puzzle {
   constructor(word) {
@@ -113,21 +114,24 @@ class Wordle extends Puzzle {
     const isWinningGuess = this.isWinner(word);
     const isLastRow = row.id === 'row-5';
 
-    if (isWinningGuess) { 
-      this.bounceAnimation([...row.children]);
-      this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
-      this.setPuzzleSolved();
-    } else if (isLastRow) {
-      this.showPuzzleMessage(`The correct word is ${this.letters.join('').toUpperCase()}.`);
-      this.setPuzzleSolved(false);
-    }
+    setTimeout(() => {
+      if (isWinningGuess) { 
+        this.bounceAnimation([...row.children]);
+        this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
+        this.setPuzzleSolved();
+      } else if (isLastRow) {
+        this.showPuzzleMessage(`The correct word is ${this.letters.join('').toUpperCase()}.`);
+        this.setPuzzleSolved(false);
+      }
+    }, 3250);
   }
 
   // Change square background color
   styleResults(results, row) {
-    const tiles = row.children;
+    const tiles = [...row.children];
 
-    results.forEach((status, idx) => tiles[idx].classList.add(status));
+    // results.forEach((status, idx) => tiles[idx].classList.add(status));
+    tileFlipAnimation(tiles, results) 
     row.classList.remove('incomplete-row');
   }
 }
