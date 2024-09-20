@@ -114,16 +114,18 @@ class Wordle extends Puzzle {
     const isWinningGuess = this.isWinner(word);
     const isLastRow = row.id === 'row-5';
 
-    setTimeout(() => {
-      if (isWinningGuess) { 
+    if (isWinningGuess) { 
+      this.setPuzzleSolved();
+      setTimeout(() => { 
         this.bounceAnimation([...row.children]);
-        this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
-        this.setPuzzleSolved();
-      } else if (isLastRow) {
+        this.showPuzzleMessage(`You solved this Wordle!`);
+      }, 3250);
+    } else if (isLastRow) {
+      this.setPuzzleSolved(false);
+      setTimeout(() => { 
         this.showPuzzleMessage(`The correct word is ${this.letters.join('').toUpperCase()}.`);
-        this.setPuzzleSolved(false);
-      }
-    }, 3250);
+      }, 3250); 
+    }
   }
 
   // Change square background color

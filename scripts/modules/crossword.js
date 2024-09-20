@@ -61,7 +61,7 @@ class Crossword extends Puzzle {
     if (isWinningGuess) {
       this.bounceAnimation(letterDivs);
       this.styleResults(letterDivs);
-      this.showPuzzleMessage(`You solved this ${this.type} puzzle!`);
+      this.showPuzzleMessage(`You solved this crossword!`);
       this.setPuzzleSolved();
     } else {
       this.shakeAnimation(letterDivs);

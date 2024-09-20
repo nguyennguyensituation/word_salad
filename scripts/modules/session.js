@@ -280,7 +280,7 @@ class Session {
         currentPuzzle.playPuzzle.call(currentPuzzle, event.key)
         
         if (currentPuzzle.puzzlePlayed) {
-          const closePuzzleBtn = document.getElementById('close-puzzle-btn');
+          const closePuzzleBtn = document.querySelector('.close-puzzle-btn');
 
           this.showCardValue(currentPuzzle.puzzleSolved);
           this.game.puzzlesRemaining -= 1;

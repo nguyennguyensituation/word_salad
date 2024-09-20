@@ -291,7 +291,7 @@ input[type=button]:not([disabled]):hover {
   text-transform: capitalize;
 }
 
-#close-puzzle-btn {
+.close-puzzle-btn {
   background-color: white;
   width: 50px;
   height: 50px;
